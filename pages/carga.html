@@ -5,25 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Carga de Articulos Nuevos</title>
     <!-- TOASTIFY - STYLES -->
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <link rel="stylesheet" href="./css/styles.css" />
-    <script defer src="./js/main.js"></script>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <script defer src="../js/main.js"></script>
+    <script defer src="../js/carga.js"></script>
   </head>
   <body>
     <header>
-      <!-- seccion para la carga de productos al iniciar el modulo -->
-      <section id="idCargaArticulosContenedor" class="cargaArticulosContenedor">
-        <div id="idCargaArticulosElementos" class="cargaArticulosElementos">
-        </div>
-      </section>
       <!-- titulo pricipal -->
-      <div class="headerContenedor">  
+      <div class="headerContenedor">
         <div class="headerContenedorElementos">
-          <h1 class="headerTitulo">
-            Compras
-          </h1>
+          <h1 class="headerTitulo">Carga de Articulos Nuevos</h1>
           <nav>
-            <a href="../index.html" class="headerHref">Volver a Compras</a>
+            <a href="../index.html" class="headerRef">Volver a Compras</a>
           </nav>
         </div>
       </div>
@@ -33,6 +31,7 @@
       <div id="idMainContenedor" class="mainContenedor">
         <div id="idMainContenedorElementos" class="mainContenedorElementos">
           <h2 id="idMainTituloCrear" class="mainTitulo">Crear Articulo</h2>
+
           <div
             id="idMainContenedorFormularioCrear"
             class="mainContenedorFormulario"
@@ -116,9 +115,19 @@
               </div>
             </form>
           </div>
+          <div id="idMainContenedorResultadosArtCreado" class="mainContenedorResultados">
+            <div id="idMainResultadosArtCreado" class="mainResultados">
+
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
     <footer></footer>
-     <!-- TOASTIFY - SCRIPT -->
-     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <!-- TOASTIFY - SCRIPT -->
+    <script
+      type="text/javascript"
+      src="https://cdn.jsdelivr.net/npm/toastify-js"
+    ></script>
   </body>
 </html>
