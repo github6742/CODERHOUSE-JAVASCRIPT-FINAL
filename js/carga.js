@@ -70,7 +70,7 @@ function cargarArticulo(e){
   const nombre = document.getElementById("idCrearArticuloNombre").value;
   const marca = document.getElementById("idCrearArticuloMarca").value;
   const categoria = document.getElementById("idCrearArticuloCategoria").value;
-  const precio = formatearImporte(document.getElementById("idCrearArticuloPrecio").value);
+  const precio = document.getElementById("idCrearArticuloPrecio").value;
   
   if (listaPrecioArticulos.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )){
      crearMensajeTransaccionToast("Ya existe un articulo con ese codigo");
