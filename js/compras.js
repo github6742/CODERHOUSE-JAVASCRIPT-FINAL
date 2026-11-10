@@ -613,9 +613,10 @@ function verCarritoCompras(){
   
 } 
 
-function ocultarCarritoCompras(e){
+//function ocultarCarritoCompras(e){
+function ocultarCarritoCompras(){
   //
-  e.preventDefault();
+  //e.preventDefault();
   //
   localStorage.setItem("carritoComprasOculto","SI");
   const tagIdMainCarritoCompras = document.getElementById("idMainCarritoCompras");
@@ -641,8 +642,9 @@ function ocultarCarritoCompras(e){
  }
 }   
 
-function vaciarCarritoCompras(e){
-  e.preventDefault();
+//function vaciarCarritoCompras(e){
+function vaciarCarritoCompras(){
+  //e.preventDefault();
   localStorage.setItem("carritoComprasOculto","SI")
   //
   if (carritoCompras.length > 0) {
@@ -655,7 +657,7 @@ function vaciarCarritoCompras(e){
      //
      (tagIdTotalCarrito) && (tagIdTotalCarrito.innerHTML=``);
      //
-     carritoCompras.splice(0,carritoCompras.length);
+     carritoCompras.splice(0, carritoCompras.length);
      //
      crearMensajeTransaccionToast("Se eliminaron los articulos del carrito")
   }else{ 
@@ -665,41 +667,142 @@ function vaciarCarritoCompras(e){
   localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
 }   
 
-function confirmarCarritoCompras(e){
+//function confirmarCarritoCompras(e){
+async function confirmarCarritoCompras(){
   
-  e.preventDefault();
+  //e.preventDefault();
   
-  (carritoCompras.length > 0) ? crearMensajeTransaccionToast("Se comfirmo la compra") 
+  /*(carritoCompras.length > 0) ? crearMensajeTransaccionToast("Se comfirmo la compra") 
                               : crearMensajeTransaccionToast("El carrito de compras esta vacio");
+                              */
+  if (carritoCompras.length === 0) {
+     crearMensajeTransaccionToast("El carrito de compras esta vacio"); 
+     return;
+  };
+  
+  const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (parseInt(articulo.precio)*parseInt(articulo.cantidad)),0);
+
+  const {value: swalValores} = await Swal.fire({
+   title: "Finalizar Compra",
+   html: `
+      <input id="idSwalNombre" class="swal2-input" placeholder="Ingrese su nombre completo">
+      <input id="idSwalEmail" class="swal2-input" placeholder="Email">
+      <input id="idSwalDireccionEnvio" class="swal2-input" placeholder="Direccion de envío">
+      <select id="idSwalMedioPago" class="swal2-select">
+        <option value="">Metodo de Pago</option>
+        <option value="efectivo">Efectivo</option>
+        <option value="tarjetaCredito">Tarjeta Crédito</option>
+        <option value="tarjetaDebito">Tarjeta Débito</option>
+        <option value="transferencia">Transferencia</option>
+      </select>
+      <p id="idSwalTotalPago">Total a pagar: <strong>${totalCarrito}</strong></p>        
+   `,
+   focusConfirm: false,
+   showCancelButton: true,
+   confirmButtonText: "Confirmar compra",
+   cancelButtonText: "Cancelar",
+   confirmButtonColor: "green",
+   preConfirm: () => {
+       const nombre = document.getElementById("idSwalNombre").value;
+       const email = document.getElementById("idSwalEmail").value;
+       const direccionEnvio = document.getElementById("idSwalDireccionEnvio").value;
+       const medioPago = document.getElementById("idSwalMedioPago").value;
+
+      if (!nombre || !email || !direccionEnvio || !medioPago) {
+         Swal.showValidationMessage("Debe completar todos los campos")
+         return false;
+      }
+
+       return {nombre, email, direccionEnvio, medioPago};
+   }
+  });
+
+  if (!swalValores) return;
+
+  const numeroOrdenVenta = (carritoComprasFinalizadas.length === 0) ? 1 : carritoComprasFinalizadas.length+1;
+  
+  await Swal.fire({
+   title: "Compra exitosa",
+   html: `
+      <p>Gracias por su compra, <strong>${swalValores.nombre}</strong><p>
+      <p>Número de Orden de Venta: <strong>${numeroOrdenVenta}</strong><p>
+      <p>Total Compra: <strong>${totalCarrito}</strong><p>
+      <p>Metodo de Pago: <strong>${swalValores.medioPago}</strong><p>
+      <p>Dirección de envío: <strong>${swalValores.direccionEnvio}</strong><p>
+   `,
+   icon: "success",
+   confirmButtonText: "Aceptar",
+   confirmButtonColor: "green"
+  });
+
+  
+  datosStorageCarritoComprasFinalizadas();
+
+  const venta = {
+   cliente: {
+     ordenDeVenta: numeroOrdenVenta,
+     nombreCliente: swalValores.nombre,
+     emailCliente: swalValores.email,
+     direccionEnvio: swalValores.direccion,
+     medioPago: swalValores.medioPago,
+     totalImporte: totalCarrito
+   },
+   articulos: [...carritoCompras]
+  }
+  carritoComprasFinalizadas.push(venta);
+  localStorage.setItem("carritoComprasFinalizadas", JSON.stringify(carritoComprasFinalizadas));
+  
+  
+  const tagIdMainCarritoCompras = document.getElementById("idMainCarritoCompras");
+  (tagIdMainCarritoCompras) && (tagIdMainCarritoCompras.innerHTML=``);
+  const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+  (tagIdTotalCarrito) && (tagIdTotalCarrito.innerHTML=``);
+
+  carritoCompras = [];
+  localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));
+  
 } 
 
 const tagFormBuscarArticulo = document.getElementById("idBuscarArticuloCategoria");
 tagFormBuscarArticulo.addEventListener("change", (e) => {
     e.preventDefault();
-    buscarArticulo()
- });
+    buscarArticulo();
+});
 
 const tagBotonVerCarrito = document.getElementById("idBotonVerCarritoCompras");
 tagBotonVerCarrito.addEventListener("click", (e) => {
     e.preventDefault();
-    if (carritoCompras.length == 0) {crearMensajeTransaccionToast("El carrito de compras esta vacio")} else {
-    verCarritoCompras();}
-}
-);
+    datosStorageCarritoCompras();
+    if (carritoCompras.length == 0) {
+        crearMensajeTransaccionToast("El carrito de compras esta vacio");
+    } else {
+      verCarritoCompras();
+   };
+});
 
 const tagBotonOcultarCarrito = document.getElementById("idBotonOcultarCarritoCompras");
-tagBotonOcultarCarrito.addEventListener("click", ocultarCarritoCompras);
+tagBotonOcultarCarrito.addEventListener("click", (e) => {
+   e.preventDefault();
+   datosStorageCarritoCompras();
+   ocultarCarritoCompras();
+});
 
 const tagBotonVaciarCarrito = document.getElementById("idBotonVaciarCarritoCompras");
-tagBotonVaciarCarrito.addEventListener("click", vaciarCarritoCompras);
+tagBotonVaciarCarrito.addEventListener("click", (e) => {
+   e.preventDefault();    
+   datosStorageCarritoCompras();
+   vaciarCarritoCompras();
+});
 
 const tagBotonConfirmarCarrito = document.getElementById("idBotonConfirmarCarritoCompras");
-tagBotonConfirmarCarrito.addEventListener("click", confirmarCarritoCompras);
+tagBotonConfirmarCarrito.addEventListener("click", (e) => {
+   e.preventDefault();
+   datosStorageCarritoCompras();
+   confirmarCarritoCompras();
+});
 
 const tagInputBuscarArticuloCategoria = document.getElementById("idBuscarArticuloCategoria");
 tagInputBuscarArticuloCategoria.addEventListener("input",()=>localStorage.setItem("idBuscarArticuloCategoria",document.getElementById("idBuscarArticuloCategoria").value));
-
-
 
 async function inicioCompras(){
 

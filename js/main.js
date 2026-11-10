@@ -1,5 +1,6 @@
 let listaPrecioArticulos = [];
 let carritoCompras = [];
+let carritoComprasFinalizadas = [];
 let articulosEncontrados = [];
 
 const url = "./db/data.json";
@@ -197,7 +198,18 @@ function datosStorageCarritoCompras(){
       localStorage.setItem("carritoCompras", JSON.stringify([...carritoComprasStorage]));
       carritoCompras = [...carritoComprasStorage];
   };
-  carritoCompras.length > 0 && (localStorage.getItem("carritoComprasOculto") === "NO" || localStorage.getItem("carritoComprasOculto")===null ) 
+  //carritoCompras.length > 0 && (localStorage.getItem("carritoComprasOculto") === "NO" || localStorage.getItem("carritoComprasOculto")===null ) 
+  /*&& agregarListaArticulosHtml(carritoCompras)*/;
+}
+
+function datosStorageCarritoComprasFinalizadas(){  
+    console.log("--->datosStorageCarritoComprasFinalizadas()")
+  let carritoComprasFinalizadasStorage = (JSON.parse(localStorage.getItem("carritoComprasFinalizadas")) == null) ? ([]) : JSON.parse(localStorage.getItem("carritoComprasFinalizadas"));
+  if (carritoComprasFinalizadasStorage.length > 0) {
+      localStorage.setItem("carritoComprasFinalizadas", JSON.stringify([...carritoComprasFinalizadasStorage]));
+      carritoComprasFinalizadas = [...carritoComprasFinalizadasStorage];
+  };
+  //carritoCompras.length > 0 && (localStorage.getItem("carritoComprasOculto") === "NO" || localStorage.getItem("carritoComprasOculto")===null ) 
   /*&& agregarListaArticulosHtml(carritoCompras)*/;
 }
 

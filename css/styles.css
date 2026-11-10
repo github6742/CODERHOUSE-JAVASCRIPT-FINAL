@@ -193,7 +193,7 @@ body {
     max-width: 100%;
     border-radius: 8px;
 }
-.articuloEncontrado, .carritoComprasArticulo .articuloNuevo{
+.articuloEncontrado, .carritoComprasArticulo, .articuloNuevo{
     display: flex;
     flex-direction: column;
     gap: 8px;
