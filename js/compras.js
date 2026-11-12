@@ -3,23 +3,33 @@ function eliminarDelCarritoDatos(articuloId){
   localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
 }
 
+function imprimirTotalImporteCarritoN(){
+  const tagIdTotalCarrito = document.getElementById("idTotalCarrito");  
+  
+  if (tagIdTotalCarrito) {
+     let totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (articulo.precio*articulo.cantidad),0);
+     tagIdTotalCarrito.innerText = `Importe Total del Carrito de Compras: ${formatearImporte(totalCarrito)}`;
+  }
+}
+
 function eliminarDelCarritoHtml(articuloId){
   const tagIdMainCarritoCompras = document.getElementById("idMainCarritoCompras");
   const tagIdCarritoComprasArticulo = document.getElementById("idCarritoComprasArticulo"+articuloId);
-  const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+  //const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
 
   (tagIdMainCarritoCompras && tagIdCarritoComprasArticulo) && tagIdMainCarritoCompras.removeChild(tagIdCarritoComprasArticulo);
+  
+  //if (tagIdTotalCarrito) {
+  //   let totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (articulo.precio*articulo.cantidad),0);
+  //   tagIdTotalCarrito.innerText = `Total del Carrito de Compras: ${formatearImporte(totalCarrito)}`;
+  //}
 
-  if (tagIdTotalCarrito) {
-     let totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (articulo.precio*articulo.cantidad),0);
-     tagIdTotalCarrito.innerText = `Total del Carrito de Compras: ${formatearImporte(totalCarrito)}`;
-  }
+  imprimirTotalImporteCarritoN();
 
   crearMensajeTransaccionToast("El articulo fue eliminado");
 }
 
-function eliminarDelCarrito(e, articuloId){
-  e.preventDefault();
+function eliminarDelCarrito(articuloId){
   eliminarDelCarritoDatos(articuloId);
   eliminarDelCarritoHtml(articuloId);
 }
@@ -27,13 +37,10 @@ function eliminarDelCarrito(e, articuloId){
 function agregarListaArticulosHtml(lista){
   lista.forEach(articulo => {agregarArticuloHtml(articulo.id)});
 }
-         
-function agregarArticuloHtml(articuloId){
-  let totalCarrito;
+
+function cargarCarritoComprasN(articulo){
   let contenidoHtml;
   const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
-  const articulo = carritoCompras.find(articulo => articulo.id == articuloId);
-
   if (tagMainCarritoCompras) {
      const tagDivArticulo = document.createElement("div");
      tagDivArticulo.id = "idCarritoComprasArticulo"+articulo.id;
@@ -78,93 +85,249 @@ function agregarArticuloHtml(articuloId){
 
      tagDivArticulo.innerHTML = contenidoHtml;     
   }
+}
 
-  const tagBotonEliminar = document.getElementById("idCarritoComprasBotonEliminar"+articulo.id);
-  (tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => eliminarDelCarrito(e,articulo.id)));
+function crearListenerEliminarDelCarritoN(articuloId){
+  const tagBotonEliminar = document.getElementById("idCarritoComprasBotonEliminar"+articuloId);
+  (tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => {e.preventDefault();eliminarDelCarrito(articuloId)}));
+}  
 
-  const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
-  if (tagIdTotalCarrito) {
-     totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
-     tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
+function imprimirTotalImporteArticuloCompradoN(articuloId, cantidad, precio){
+  const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articuloId);
+  (tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidad*precio)));
+}
+
+ 
+//********************************1
+function imprimirTotalImporteArticuloBuscadoN(articuloId, cantidad, precio){
+  //const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articuloId);
+  //(tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidad*precio)));
+  const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articuloId);
+  if (tagIdTotalArticuloBuscado){
+      tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidad*precio);
   };
+}
 
-  const tagBotonRestar = document.getElementById("idCarritoBotonRestar"+articulo.id);
+function imprimirCantidadCarritoN(articuloId, cantidad){
+  let cantidadResultado;
+  const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articuloId);
+  if (tagResultadoCantidadSpan) {
+      cantidadResultado = Number(tagResultadoCantidadSpan.innerText);
+      if (cantidadResultado > 1){
+          cantidadResultado += cantidad;
+          tagResultadoCantidadSpan.innerText = cantidadResultado;
+      };
+   };
+}
+
+function restarCantidadArticuloCompradoN(articuloId){
+  const tagBotonRestar = document.getElementById("idCarritoBotonRestar"+articuloId);
+  const articulo = carritoCompras.find(articulo => articulo.id == articuloId);
   if (tagBotonRestar) {
       tagBotonRestar.addEventListener("click", (e) => {
         e.preventDefault();
-        let cantidadResultado;
+        //let cantidadResultado;
         
-        const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
-        if (tagResultadoCantidadSpan) {
-           cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
-           if (cantidadResultado > 1){
-               cantidadResultado += -1;
-               tagResultadoCantidadSpan.innerText = cantidadResultado;
-           };
-        };
+        imprimirCantidadCarritoN(articulo.id,-1);
+        //const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articuloId);
+        //if (tagResultadoCantidadSpan) {
+        //   cantidadResultado = Number(tagResultadoCantidadSpan.innerText);
+        //   if (cantidadResultado > 1){
+        //       cantidadResultado += -1;
+        //       tagResultadoCantidadSpan.innerText = cantidadResultado;
+        //   };
+        //};
 
-        const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
-        if (tagIdTotalArticuloBuscado){
-            tagIdTotalArticuloBuscado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio));
-        };     
+        // este codigo es de la busqueda, no deberia estar aqui//////////////////////////////
+        //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+        //if (tagIdTotalArticuloBuscado){
+        //    tagIdTotalArticuloBuscado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio));
+        //};     
 
         articulo.cantidad = cantidadResultado;
         articulo.totalArticulo = cantidadResultado*articulo.precio;
         localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
 
-        const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articulo.id);
-        (tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio)));
+        imprimirTotalImporteArticuloCompradoN(articulo.id,cantidadResultado, articulo.precio);
+        //const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+        //(tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio)));
 
-        const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
-        if (tagIdTotalCarrito) {
-            totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
-            tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
-        }
+        imprimirTotalImporteCarritoN();
+        
+        //const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+        //if (tagIdTotalCarrito) {
+        //    totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+        //    tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
+        //}
       });
- }
- const tagBotonSumar = document.getElementById("idCarritoBotonSumar"+articulo.id);
- if (tagBotonSumar) {
+  }
+}
+
+function sumarCantidadArticuloCompradoN(articuloId){
+  const tagBotonSumar = document.getElementById("idCarritoBotonSumar"+articuloId);
+  const articulo = carritoCompras.find(articulo => articulo.id == articuloId);
+  if (tagBotonSumar) {
      tagBotonSumar.addEventListener("click", (e) => {
        e.preventDefault();
-       let cantidadResultado;
+       //let cantidadResultado;
+       imprimirCantidadCarritoN(articuloId, 1);
+       //const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articuloId);
+       //if (tagResultadoCantidadSpan) {
+       //    cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
+       //    cantidadResultado += 1;
+       //    tagResultadoCantidadSpan.innerText = cantidadResultado;
+       //};
 
-       const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
-       if (tagResultadoCantidadSpan) {
-           cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
-           cantidadResultado += 1;
-           tagResultadoCantidadSpan.innerText = cantidadResultado;
-       };
-
-       const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
-       if (tagIdTotalArticuloBuscado){
-           tagIdTotalArticuloBuscado.innerText="Total: "+(parseInt(cantidadResultado)*parseInt(articulo.precio))
-       };   
+        // este codigo es de la busqueda, no deberia estar aqui//////////////////////////////
+       //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articuloId);
+       //if (tagIdTotalArticuloBuscado){
+       //    tagIdTotalArticuloBuscado.innerText="Total: "+(parseInt(cantidadResultado)*parseInt(articulo.precio))
+       //};   
 
        articulo.cantidad = parseInt(cantidadResultado);
        articulo.totalArticulo =cantidadResultado*articulo.precio;
        localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
 
-       const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articulo.id);
-       (tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio)));
+       imprimirTotalImporteArticuloCompradoN(articulo.id,cantidadResultado, articulo.precio);
+       //const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+       //(tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio)));
 
-       const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
-       if (tagIdTotalCarrito) {
-          totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
-          tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
-       }
+       imprimirTotalImporteCarritoN();
+
+       //const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+       //if (tagIdTotalCarrito) {
+       //   totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+       //   tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
+       //}
    });
  }
 }
 
+function agregarArticuloHtml(articuloId){
+  //let totalCarrito;
+  //let contenidoHtml;
+  //const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
+  const articulo = carritoCompras.find(articulo => articulo.id == articuloId);
+
+  cargarCarritoComprasN(articulo);
+
+  
+  // if (tagMainCarritoCompras) {
+  //    const tagDivArticulo = document.createElement("div");
+  //    tagDivArticulo.id = "idCarritoComprasArticulo"+articulo.id;
+  //    tagDivArticulo.className = "carritoComprasArticulo";
+  //    tagMainCarritoCompras.appendChild(tagDivArticulo); 
+
+  //    contenidoHtml = ` 
+  //         <div class="contenedorCard">
+  //             <div class="contenedorCardDatos"> 
+  //               <div class="contenedorCardDatosFila">
+  //                    <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
+  //               </div>
+  //               <div class="contenedorCardDatosFila">
+  //                    <p class="cardDatosFilaEtiqueta">Codigo:</p><p class="cardDatosFilaValor">${articulo.codigo.toUpperCase()}</p>
+  //               </div>
+  //               <div class="contenedorCardDatosFila">
+  //                    <p class="cardDatosFilaEtiqueta">Nombre:</p><p class="cardDatosFilaValor">${articulo.nombre.toUpperCase()}</p>
+  //               </div>
+  //               <div class="contenedorCardDatosFila">
+  //                    <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${articulo.marca.toUpperCase()}</p>
+  //               </div>
+  //               <div class="contenedorCardDatosFila">
+  //                    <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(articulo.precio)}</p>  
+  //               </div>
+  //             </div>  
+  //             <div id="idCarritoComprasCantidadDiv${articulo.id}" class="carritoComprasCantidadDiv">                                        
+  //                  <div class="contenedorCarritoCantidad">
+  //                       <button id="idCarritoBotonRestar${articulo.id}" class="botonCantidad">-</button>
+  //                       <span id="idCarritoCantidadSpan${articulo.id}" class="spanCantidad">${articulo.cantidad}</span>
+  //                        <button id="idCarritoBotonSumar${articulo.id}" class="botonCantidad">+</button>
+  //                  </div>                              
+  //             </div>
+  //             <div class="contenedorCardDatosFila">
+  //                  <p id="idTotalArticuloComprado${articulo.id}" class="labelCard">Total: ${formatearImporte(articulo.precio*articulo.cantidad)}</p>
+  //             </div>
+  //             <div class="contenedorCardDatosBoton">
+  //               <button id="idCarritoComprasBotonEliminar${articulo.id}" class="buttonCard">ELIMINAR</button>                
+  //             </div>  
+  //           </div>
+  //           </div>
+  //           `;
+
+  //    tagDivArticulo.innerHTML = contenidoHtml;     
+  // }
+ 
+
+  crearListenerEliminarDelCarritoN(articuloId)
+  //const tagBotonEliminar = document.getElementById("idCarritoComprasBotonEliminar"+articulo.id);
+  //(tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => {e.preventDefault();eliminarDelCarrito(articulo.id)}));
+
+  imprimirTotalImporteCarritoN();
+
+  //const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+  //if (tagIdTotalCarrito) {
+  //   totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+  //   tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
+  //};
+  
+  restarCantidadArticuloCompradoN(articulo.id);
+
+//   const tagBotonRestar = document.getElementById("idCarritoBotonRestar"+articulo.id);
+//   if (tagBotonRestar) {
+//       tagBotonRestar.addEventListener("click", (e) => {
+//         e.preventDefault();
+//         let cantidadResultado;
+        
+//         const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
+//         if (tagResultadoCantidadSpan) {
+//            cantidadResultado = Number(tagResultadoCantidadSpan.innerText);
+//            if (cantidadResultado > 1){
+//                cantidadResultado += -1;
+//                tagResultadoCantidadSpan.innerText = cantidadResultado;
+//            };
+//         };
+
+//         // este codigo es de la busqueda, no deberia estar aqui//////////////////////////////
+//         //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+//         //if (tagIdTotalArticuloBuscado){
+//         //    tagIdTotalArticuloBuscado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio));
+//         //};     
+
+//         articulo.cantidad = cantidadResultado;
+//         articulo.totalArticulo = cantidadResultado*articulo.precio;
+//         localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
+
+//         imprimirTotalImporteArticuloN(articulo.id,cantidadResultado, articulo.precio);
+//         //const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+//         //(tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio)));
+
+//         imprimirTotalImporteCarritoN();
+        
+//         //const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+//         //if (tagIdTotalCarrito) {
+//         //    totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+//         //    tagIdTotalCarrito.innerText="Total Carrito: "+(formatearImporte(totalCarrito));
+//         //}
+//       });
+//  }
+ 
+  sumarCantidadArticuloCompradoN(articulo.id);
+}
+
 function agregarAlCarritoDatos(articuloId){
   const articulo = listaPrecioArticulos.find(articulo => parseInt(articulo.id) === parseInt(articuloId));
-
+  //const articuloNuevo = [];
   const tagIdResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articuloId);
   if (tagIdResultadoCantidadSpan) {
-    let cantidad = parseInt(tagIdResultadoCantidadSpan.innerText);
-    articulo.cantidad = parseInt(cantidad);
-    articulo.totalArticulo = parseFloat(articulo.precio)*parseInt(cantidad);
-    carritoCompras.push(articulo);
+    let cantidad = Number(tagIdResultadoCantidadSpan.innerText);
+    //articulo.cantidad = parseInt(cantidad);
+    //articulo.totalArticulo = parseFloat(articulo.precio)*parseInt(cantidad);
+    const articuloNuevo = {
+      ...articulo,
+      cantidad: cantidad,
+      totalArticulo: articulo.precio*cantidad
+    };
+    carritoCompras.push(articuloNuevo);
     localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
   };
 }
@@ -173,8 +336,9 @@ function agregarAlCarritoHtml(articuloId){
   agregarArticuloHtml(articuloId);
 }
 
-function agregarAlCarrito(e,articuloId){
-  e.preventDefault();
+//function agregarAlCarrito(e,articuloId){
+function agregarAlCarrito(articuloId){
+  //e.preventDefault();
   if (carritoCompras.some(articulo => parseInt(articulo.id) === parseInt(articuloId))) {
      crearMensajeTransaccionToast("El articulo ya existe en el carrito de compras");
   } else {
@@ -184,14 +348,16 @@ function agregarAlCarrito(e,articuloId){
   }    
 }
 
-function buscarArticulosHtml(lista){
+function cargarArticulosResultadosN(){
   let contenidoHtml;
   let tagDivArticuloEncontrado;
   let cantidad;
+
   const tagMainResultados = document.getElementById("idMainResultados");
   if (tagMainResultados) {
     tagMainResultados.innerHTML = ``;
-    lista.forEach(lista => {
+    listaPrecioArticulos.forEach(lista => {
+      
       tagDivArticuloEncontrado = document.createElement('div')
       tagDivArticuloEncontrado.id = "idArticuloEncontrado"+lista.id;
       tagDivArticuloEncontrado.className ="articuloEncontrado";
@@ -242,58 +408,147 @@ function buscarArticulosHtml(lista){
         tagDivArticuloEncontrado.innerHTML = contenidoHtml;
     });
   };
-  
-  lista.forEach(articulo => {
-      const tagBotonAgregar = document.getElementById("idResultadosBotonAgregar"+articulo.id);
-      (tagBotonAgregar) && (tagBotonAgregar.addEventListener("click", (e) => agregarAlCarrito(e,articulo.id)));
+}
 
-      const tagBotonRestar = document.getElementById("idBotonRestar"+articulo.id);
+function crearListenerAgregarResultadoN(articuloId){
+  const tagBotonAgregar = document.getElementById("idResultadosBotonAgregar"+articuloId);
+  (tagBotonAgregar) && (tagBotonAgregar.addEventListener("click", (e) => {e.preventDefault();agregarAlCarrito(articuloId)}));
+}
+
+function imprimirCantidadBuscadoN(articuloId, cantidad){
+  let cantidadResultado;
+
+  const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articuloId);
+  if (tagResultadoCantidadSpan) {
+    cantidadResultado = Number(tagResultadoCantidadSpan.innerText);
+    if (cantidadResultado > 1){
+        cantidadResultado += cantidad;
+        tagResultadoCantidadSpan.innerText = cantidadResultado;
+    };
+  };
+}
+
+function restarCantidadArticuloBuscadoN(articuloId){
+const articulo = listaPrecioArticulos.find(articulo=>articulo.id == articuloId);
+  const tagBotonRestar = document.getElementById("idBotonRestar"+articuloId);
       if (tagBotonRestar) {
          tagBotonRestar.addEventListener("click", (e) => {
            e.preventDefault();
-           let cantidadResultado;
+           imprimirCantidadBuscadoN(articuloId,-1);
+          //  let cantidadResultado;
 
-           const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articulo.id);
-           if (tagResultadoCantidadSpan) {
-              cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
-              if (cantidadResultado > 1){
-                  cantidadResultado += -1;
-                  tagResultadoCantidadSpan.innerText = cantidadResultado;
-              };
-           };
+          //  const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articuloId);
+          //  if (tagResultadoCantidadSpan) {
+          //     cantidadResultado = Number(tagResultadoCantidadSpan.innerText);
+          //     if (cantidadResultado > 1){
+          //         cantidadResultado += -1;
+          //         tagResultadoCantidadSpan.innerText = cantidadResultado;
+          //     };
+          //  };
+           
+           //*******************************************************1
+           imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
+           //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
+           //if (tagIdTotalArticuloBuscado){
+           //   tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+           //};
 
-           const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
-           if (tagIdTotalArticuloBuscado){
-              tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
-           };
-
-           articulo.cantidad = cantidadResultado;
-           localStorage.setItem("articulosEncontrados",JSON.stringify(lista));
+           //articulo.cantidad = cantidadResultado;
+           //localStorage.setItem("articulosEncontrados",JSON.stringify(lista));
          });
       };
+}
 
-      const tagBotonSumar = document.getElementById("idBotonSumar"+articulo.id);
+
+function sumarCantidadArticuloBuscadoN(articuloId){
+      const tagBotonSumar = document.getElementById("idBotonSumar"+articuloId);
+      const articulo = listaPrecioArticulos.find(articulo => articulo.id == articuloId)
       if (tagBotonSumar) {
          tagBotonSumar.addEventListener("click", (e) => {
            e.preventDefault();
-           let cantidadResultado;
+           imprimirCantidadBuscadoN(articulo.id,1);
+          //  let cantidadResultado;
 
-           const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articulo.id);
-           if (tagResultadoCantidadSpan) {
-              cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
-              cantidadResultado += 1;
-              tagResultadoCantidadSpan.innerText = cantidadResultado;
-           };
+          //  const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articuloId);
+          //  if (tagResultadoCantidadSpan) {
+          //     cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
+          //     cantidadResultado += 1;
+          //     tagResultadoCantidadSpan.innerText = cantidadResultado;
+          //  };
 
-           const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
-           if (tagIdTotalArticuloBuscado){
-              tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
-           };
+           //*****************************************************1
+           imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
+           //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
+           //if (tagIdTotalArticuloBuscado){
+           //   tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+           //};
 
            articulo.cantidad = cantidadResultado;
            localStorage.setItem("articulosEncontrados",JSON.stringify(lista));
          });
       }
+}
+
+function buscarArticulosHtml(lista){
+  
+  cargarArticulosResultadosN();
+
+  lista.forEach(articulo => {
+    crearListenerAgregarResultadoN(articulo.id);
+      //const tagBotonAgregar = document.getElementById("idResultadosBotonAgregar"+articulo.id);
+      //(tagBotonAgregar) && (tagBotonAgregar.addEventListener("click", (e) => agregarAlCarrito(e,articulo.id)));
+    restarCantidadArticuloBuscadoN(articulo.id);
+      // const tagBotonRestar = document.getElementById("idBotonRestar"+articulo.id);
+      // if (tagBotonRestar) {
+      //    tagBotonRestar.addEventListener("click", (e) => {
+      //      e.preventDefault();
+      //      let cantidadResultado;
+
+      //      const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articulo.id);
+      //      if (tagResultadoCantidadSpan) {
+      //         cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
+      //         if (cantidadResultado > 1){
+      //             cantidadResultado += -1;
+      //             tagResultadoCantidadSpan.innerText = cantidadResultado;
+      //         };
+      //      };
+           
+      //      //*******************************************************1
+      //      imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
+      //      //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
+      //      //if (tagIdTotalArticuloBuscado){
+      //      //   tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+      //      //};
+
+            articulo.cantidad = cantidadResultado;
+            localStorage.setItem("articulosEncontrados",JSON.stringify(lista));
+      //    });
+      // };
+      sumarCantidadArticuloBuscadoN(articulo.id);
+      // const tagBotonSumar = document.getElementById("idBotonSumar"+articulo.id);
+      // if (tagBotonSumar) {
+      //    tagBotonSumar.addEventListener("click", (e) => {
+      //      e.preventDefault();
+      //      let cantidadResultado;
+
+      //      const tagResultadoCantidadSpan = document.getElementById("idResultadoCantidadSpan"+articulo.id);
+      //      if (tagResultadoCantidadSpan) {
+      //         cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
+      //         cantidadResultado += 1;
+      //         tagResultadoCantidadSpan.innerText = cantidadResultado;
+      //      };
+
+      //      //*****************************************************1
+      //      imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
+      //      //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
+      //      //if (tagIdTotalArticuloBuscado){
+      //      //   tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+      //      //};
+
+      //      articulo.cantidad = cantidadResultado;
+      //      localStorage.setItem("articulosEncontrados",JSON.stringify(lista));
+      //    });
+      // }
   });
 };
 
@@ -319,118 +574,132 @@ function verCarritoCompras(){
       tagIdMainCarritoCompras.innerHTML = ``;
       if (tagIdMainCarritoCompras) {
           carritoCompras.forEach(lista => {
-             tagDivArticuloEncontrado = document.createElement('div')
-             tagDivArticuloEncontrado.id = "idCarritoComprasArticulo"+lista.id;
-             tagDivArticuloEncontrado.className ="articuloEncontrado";
-             tagIdMainCarritoCompras.appendChild(tagDivArticuloEncontrado);
+            cargarCarritoComprasN(articulo);
+            //  tagDivArticuloEncontrado = document.createElement('div')
+            //  tagDivArticuloEncontrado.id = "idCarritoComprasArticulo"+lista.id;
+            //  tagDivArticuloEncontrado.className ="articuloEncontrado";
+            //  tagIdMainCarritoCompras.appendChild(tagDivArticuloEncontrado);
 
-             contenidoHtml = ` <div class="contenedorCard">
-              <div class="contenedorCardDatos">
-                <div class="contenedorCardDatosFila">
-                     <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${lista.id}</p>
-                </div>
-                <div class="contenedorCardDatosFila">
-                     <p class="cardDatosFilaEtiqueta">Codigo:</p><p class="cardDatosFilaValor">${lista.codigo.toUpperCase()}</p>
-                </div>
-                <div class="contenedorCardDatosFila">
-                     <p class="cardDatosFilaEtiqueta">Nombre:</p><p class="cardDatosFilaValor">${lista.nombre.toUpperCase()}</p>
-                </div>
-                <div class="contenedorCardDatosFila">
-                     <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${lista.marca.toUpperCase()}</p>
-                </div>
-                <div class="contenedorCardDatosFila">
-                     <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(lista.precio)}</p>  
-                </div>
-              </div>
-                         <div id="idCarritoComprasCantidadDiv${lista.id}" class="carritoComprasCantidadDiv">                                        
-                              <div class="contenedorCarritoCantidad">
-                                <button id="idCarritoBotonRestar${lista.id}" class="botonCantidad">-</button>
-                                <span id="idCarritoCantidadSpan${lista.id}" class="spanCantidad">${lista.cantidad}</span>
-                                <button id="idCarritoBotonSumar${lista.id}" class="botonCantidad">+</button>
-                              </div>                              
-                         </div>
-              <div class="contenedorCardDatosFila">
-                   <p id="idTotalArticuloComprado${lista.id}" class="labelCard">Total: ${formatearImporte(lista.precio*lista.cantidad)}</p>
-              </div>
-              <div class="contenedorCardDatosBoton">
-                <button id="idCarritoComprasBotonEliminar${lista.id}" class="buttonCard">ELIMINAR</button>                
-              </div>  
-            </div>
-            `;
-             tagDivArticuloEncontrado.innerHTML = contenidoHtml;
+            //  contenidoHtml = ` <div class="contenedorCard">
+            //   <div class="contenedorCardDatos">
+            //     <div class="contenedorCardDatosFila">
+            //          <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${lista.id}</p>
+            //     </div>
+            //     <div class="contenedorCardDatosFila">
+            //          <p class="cardDatosFilaEtiqueta">Codigo:</p><p class="cardDatosFilaValor">${lista.codigo.toUpperCase()}</p>
+            //     </div>
+            //     <div class="contenedorCardDatosFila">
+            //          <p class="cardDatosFilaEtiqueta">Nombre:</p><p class="cardDatosFilaValor">${lista.nombre.toUpperCase()}</p>
+            //     </div>
+            //     <div class="contenedorCardDatosFila">
+            //          <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${lista.marca.toUpperCase()}</p>
+            //     </div>
+            //     <div class="contenedorCardDatosFila">
+            //          <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(lista.precio)}</p>  
+            //     </div>
+            //   </div>
+            //              <div id="idCarritoComprasCantidadDiv${lista.id}" class="carritoComprasCantidadDiv">                                        
+            //                   <div class="contenedorCarritoCantidad">
+            //                     <button id="idCarritoBotonRestar${lista.id}" class="botonCantidad">-</button>
+            //                     <span id="idCarritoCantidadSpan${lista.id}" class="spanCantidad">${lista.cantidad}</span>
+            //                     <button id="idCarritoBotonSumar${lista.id}" class="botonCantidad">+</button>
+            //                   </div>                              
+            //              </div>
+            //   <div class="contenedorCardDatosFila">
+            //        <p id="idTotalArticuloComprado${lista.id}" class="labelCard">Total: ${formatearImporte(lista.precio*lista.cantidad)}</p>
+            //   </div>
+            //   <div class="contenedorCardDatosBoton">
+            //     <button id="idCarritoComprasBotonEliminar${lista.id}" class="buttonCard">ELIMINAR</button>                
+            //   </div>  
+            // </div>
+            // `;
+            //  tagDivArticuloEncontrado.innerHTML = contenidoHtml;
           });
       };              
 
-      carritoCompras.forEach(articulo => {          
-          const tagBotonEliminar = document.getElementById("idCarritoComprasBotonEliminar"+articulo.id);
-          (tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => eliminarDelCarrito(e,articulo.id)));
-         
-          const tagBotonRestar = document.getElementById("idCarritoBotonRestar"+articulo.id);
-          if (tagBotonRestar) {
-             tagBotonRestar.addEventListener("click", (e) => {
-               e.preventDefault();
-               let cantidadResultado;
-           
-               const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
-               if (tagResultadoCantidadSpan) {
-                  cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
-                  if (cantidadResultado > 1){
-                     cantidadResultado += -1;
-                     tagResultadoCantidadSpan.innerText = cantidadResultado;
-                  };
-               };
+      carritoCompras.forEach(articulo => {     
         
-               const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
-               if (tagIdTotalArticuloBuscado){
-                  tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
-               };               
+        
+
+// function crearListenerEliminarDelCarritoN(articuloId){
+//   const tagBotonEliminar = document.getElementById("idCarritoComprasBotonEliminar"+articuloId);
+//   (tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => {e.preventDefault();eliminarDelCarrito(articuloId)}));
+// }  
+          crearListenerEliminarDelCarritoN(articulo.id);
+
+          //const tagBotonEliminar = document.getElementById("idCarritoComprasBotonEliminar"+articulo.id);
+          //(tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => {e.preventDefault();eliminarDelCarrito(articulo.id)}));
+         
+           restarCantidadArticuloCompradoN(articulo.id);
+          // const tagBotonRestar = document.getElementById("idCarritoBotonRestar"+articulo.id);
+          // if (tagBotonRestar) {
+          //    tagBotonRestar.addEventListener("click", (e) => {
+          //      e.preventDefault();
+          //      let cantidadResultado;
+           
+          //      const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
+          //      if (tagResultadoCantidadSpan) {
+          //         cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
+          //         if (cantidadResultado > 1){
+          //            cantidadResultado += -1;
+          //            tagResultadoCantidadSpan.innerText = cantidadResultado;
+          //         };
+          //      };
+        
+          //      const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+          //      if (tagIdTotalArticuloBuscado){
+          //         tagIdTotalArticuloBuscado.innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+          //      };               
      
-               articulo.cantidad = parseInt(cantidadResultado);
-               articulo.totalArticulo = parseInt(cantidadResultado)*parseFloat(articulo.precio);               
-               localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras))
-               document.getElementById("idTotalArticuloComprado"+articulo.id).innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+          //      articulo.cantidad = parseInt(cantidadResultado);
+          //      articulo.totalArticulo = parseInt(cantidadResultado)*parseFloat(articulo.precio);               
+          //      localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras))
+          //      document.getElementById("idTotalArticuloComprado"+articulo.id).innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
     
-               totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
-               document.getElementById("idTotalCarrito").innerText="Total Carrito: "+(formatearImporte(totalCarrito));
-             });
-          }
+          //      totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+          //      document.getElementById("idTotalCarrito").innerText="Total Carrito: "+(formatearImporte(totalCarrito));
+          //    });
+          // }
     
-          const tagBotonSumar = document.getElementById("idCarritoBotonSumar"+articulo.id);
-          if (tagBotonSumar) {
-             tagBotonSumar.addEventListener("click", (e) => {
-               e.preventDefault();
-               let cantidadResultado;
+          sumarCantidadArticuloCompradoN(articulo.id);
+
+          // const tagBotonSumar = document.getElementById("idCarritoBotonSumar"+articulo.id);
+          // if (tagBotonSumar) {
+          //    tagBotonSumar.addEventListener("click", (e) => {
+          //      e.preventDefault();
+          //      let cantidadResultado;
   
-               const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
-               if (tagResultadoCantidadSpan) {
-                  cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
-                  cantidadResultado += 1;
-                  tagResultadoCantidadSpan.innerText = cantidadResultado;
-               };
+          //      const tagResultadoCantidadSpan = document.getElementById("idCarritoCantidadSpan"+articulo.id);
+          //      if (tagResultadoCantidadSpan) {
+          //         cantidadResultado = parseInt(tagResultadoCantidadSpan.innerText);
+          //         cantidadResultado += 1;
+          //         tagResultadoCantidadSpan.innerText = cantidadResultado;
+          //      };
      
-               const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
-               if (tagIdTotalArticuloBuscado){
-                  tagIdTotalArticuloBuscado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio));
-               };
+          //      const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloComprado"+articulo.id);
+          //      if (tagIdTotalArticuloBuscado){
+          //         tagIdTotalArticuloBuscado.innerText="Total: "+(formatearImporte(cantidadResultado*articulo.precio));
+          //      };
    
-               totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0); 
-               document.getElementById("idTotalCarrito").innerText="Total Carrito: "+(formatearImporte(totalCarrito));               
+          //      totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0); 
+          //      document.getElementById("idTotalCarrito").innerText="Total Carrito: "+(formatearImporte(totalCarrito));               
     
-               articulo.cantidad = parseInt(cantidadResultado);
-               articulo.totalArticulo = parseInt(cantidadResultado)*parseFloat(articulo.precio);               
-               localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras))
-               document.getElementById("idTotalArticuloComprado"+articulo.id).innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
+          //      articulo.cantidad = parseInt(cantidadResultado);
+          //      articulo.totalArticulo = parseInt(cantidadResultado)*parseFloat(articulo.precio);               
+          //      localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras))
+          //      document.getElementById("idTotalArticuloComprado"+articulo.id).innerText="Total: "+formatearImporte(cantidadResultado*articulo.precio);
  
-               totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
-               document.getElementById("idTotalCarrito").innerText="Total Carrito: "+formatearImporte(totalCarrito);
-             });
-           };
+          //      totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+          //      document.getElementById("idTotalCarrito").innerText="Total Carrito: "+formatearImporte(totalCarrito);
+          //    });
+          //  };
         });
   } 
-  if (carritoCompras.length > 0) {
-    totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
-    document.getElementById("idTotalCarrito").innerText="Total Carrito: "+formatearImporte(totalCarrito);
-  };  
+  imprimirTotalImporteCarritoN();
+  // if (carritoCompras.length > 0) {
+  //   totalCarrito = carritoCompras.reduce((sumador,articulocc)  => sumador + (articulocc.precio*articulocc.cantidad),0);  
+  //   document.getElementById("idTotalCarrito").innerText="Total Carrito: "+formatearImporte(totalCarrito);
+  // };  
 } 
 
 function ocultarCarritoCompras(){
@@ -441,10 +710,10 @@ function ocultarCarritoCompras(){
     crearMensajeTransaccionToast("El carrito ya esta oculto")
   } else if ((tagIdMainCarritoCompras.childElementCount > 0) && (carritoCompras.length > 0)){
      carritoCompras.forEach(articulo => {
-          const tagInputCantidad = document.getElementById("idCarritoComprasCantidadInput"+articulo.id);
-          if(tagInputCantidad){
-            articulo.cantidad = parseInt(tagInputCantidad.value);
-            articulo.totalArticulo = parseInt(tagInputCantidad.value)*parseFloat(articulo.precio);
+          const tagSpanCantidad = document.getElementById("idCarritoCantidadSpan"+articulo.id);
+          if(tagSpanCantidad){
+            articulo.cantidad = parseInt(tagSpanCantidad.value);
+            articulo.totalArticulo = parseInt(tagSpanCantidad.value)*parseFloat(articulo.precio);
           }
         });
      tagIdMainCarritoCompras.innerHTML=``;
@@ -538,7 +807,7 @@ async function confirmarCarritoCompras(){
      ordenDeVenta: numeroOrdenVenta,
      nombreCliente: swalValores.nombre,
      emailCliente: swalValores.email,
-     direccionEnvio: swalValores.direccion,
+     direccionEnvio: swalValores.direccionEnvio,
      medioPago: swalValores.medioPago,
      totalImporte: totalCarrito
    },

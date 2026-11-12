@@ -1,4 +1,3 @@
-
 function guardarDatosFormulario(){
   const valores = 
   {
@@ -13,6 +12,7 @@ function guardarDatosFormulario(){
 
 function agregarCardArticuloNuevo(articulo) {
   const tagMainResultados = document.getElementById("idMainResultadosArtCreado");
+  let contenidoHtml;
   let tagDivArticulo = document.createElement('div')
   tagDivArticulo.id = "idArticuloNuevo"+articulo.id;
   tagDivArticulo.className ="articuloNuevo";

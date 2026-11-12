@@ -75,17 +75,20 @@ function peticion(texto){
 async function fetchBase(){
   crearMensajeAvisoToast("Cargando los articulos..")
   try {
-    fetch(url)
-    .then(resp => resp.json())
-    .then(lista => {
-                       listaPrecioArticulos = [...lista]
-                       localStorage.setItem("listaPrecioArticulos", JSON.stringify([...listaPrecioArticulos]));
-                   })
-  } catch (err) {
-    err=>crearMensajeAvisoToast("No se logro cargar los articulos de la base: " + err);
-  } finally {    
-    await peticion("");
+    // simula una demora en la red
+    await peticion(""); 
+    const respFetch = await fetch(url);
+    if (!respFetch.ok) {throw new Error("Error al obtener los articulos de la base: " + respFetch.status) };
+    const lista = await respFetch.json();
+    listaPrecioArticulos = [...lista];
+    localStorage.setItem("listaPrecioArticulos", JSON.stringify([...listaPrecioArticulos]));
     crearMensajeAvisoToast("Los articulos fueron cargados satisfactoriamente");
+  } catch (err) {
+    crearMensajeAvisoToast("No se logro cargar los articulos de la base: " + err.message);
+  } finally {
+    // simula una demora en la lectura 
+    await peticion(""); 
+    crearMensajeAvisoToast("Bienvenidos al modulo de Compras");
   }
 }
 
