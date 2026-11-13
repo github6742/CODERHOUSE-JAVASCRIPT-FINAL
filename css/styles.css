@@ -9,6 +9,26 @@ body {
     padding: 1rem;  
  }
 /******************
+   CLASES GLOBALES
+*******************/
+.buttonGlobal {
+    color: white;
+    background-color: green;
+    width: 100%;
+    padding: 0.25rem;
+    font-size: 1.5rem;
+    border-radius: 5px;
+}
+.buttonGlobal {
+    color: white;
+    background-color: green;
+    width: 80%;
+    font-size: bold;
+    padding: 0.25rem;
+    font-size: 1.5rem;
+    border-radius: 5px;
+}
+/******************
    CLASES HEADER
 *******************/
 .headerContenedor{
@@ -31,8 +51,6 @@ body {
     padding: 1rem; 
 } 
 .headerTitulo {
-    /* background-color: rgb(164, 240, 167); */
-    /* color: green; */
     color: rgb(164, 240, 167);
     text-align: center;
     text-justify: center;
@@ -47,56 +65,8 @@ body {
     border-radius: 8px;
     padding: 1rem; 
 }
-/********************/
-/********************/
-/********************/
-.cargaArticulosContenedor {     
-     display: flex;
-     flex-direction: column;
-     align-items: center;
-     padding: 15px;
-}
-.cargaArticulosElementos{   
-     display: flex;
-     flex-direction: column;
-     align-items: flex-start;
-     padding: 5px;
-     width: 80%;
-}
-.cargaArticulosCard{
-    background-color: green;
-    color: whitesmoke;
-    width: 100%;
-    padding: 5px;
-    border-radius: 8px;
-    margin: 5px 10px 10px 5px;
-}
-.cardFilaCampos {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    background-color: blueviolet;
-    padding: 5px;
-    margin: 5px;
-}
-.cardLabel{
-    background-color: black;
-    padding: 2px;
-    min-width: 150px;
-}
-.cardValue{
-    background-color: gray;
-    padding: 2px;
-    width: 100%;
-}
-.ocultarSection{
-    display: none; 
-}
-/********************/
-/********************/
-/********************/
 /******************
-   CLASES MAIN 
+   CLASES MAIN CONTENEDOR
 *******************/
 .mainContenedor{
     display: flex;
@@ -109,21 +79,8 @@ body {
     flex-direction: column;
     align-items: center;
     gap: 0.5rem;
-    /* background-color: blue; */
     margin-top:10px;
     width: 100%;
-}
-.mainTitulo {
-    border-radius: 8px;  
-    text-align: center;
-    text-justify: center;
-    padding: 10px;
-    color: green;
-    background-color: rgb(164, 240, 167);
-    /* background-color:  #ddeeec; */
-    width: 90%; 
-    /* margin-top: 10px;
-    margin-bottom: 10px; */
 }
 .mainCategoriaFila {
     display: flex;
@@ -133,7 +90,6 @@ body {
     align-items: center;
     border-radius: 8px;
     color: green;
-    /* background-color: rgb(174, 226, 169); */
     background-color: rgb(164, 240, 167);
     width: 90%;
     padding: 1rem;
@@ -145,49 +101,15 @@ body {
     border: 2px solid green;
     font-size: 1rem;
 }
-/******************
-   CLASES MAIN FORMULARIO
+/*******************
+ CLASES MAIN CONTENEDOR RESULTADOS 
 *******************/
-.mainContenedorFormulario {
-    border-radius: 8px;  
-    padding: 10px;
-    width: 70%;
-    background-color:  #ddeeec;
-}
-.mainFormulario {
-    padding: 10px;
-}
-.mainFormularioFila, .idCargaProductosFila {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-}
-.mainFormularioFila label{
-    min-width: 10rem;
-    font-size: 1.25rem;
-    color: green;
-}
-.mainFormularioFila input,.mainFormularioFila select {
-    flex: 1;
-    border-radius: 5px;
-    padding: 0.5rem;
-    font-size: 1rem;
-    text-transform: uppercase;
-}
-.mainFormularioFila select{
-    text-transform: none;
-}
-/******************************
-   MAIN FORMULARIO RESULTADOS
-*********************************/
-.mainContenedorResultados, .mainContenedorCarritoCompras{
+.mainContenedorResultados{
     width: 90%;
     background-color: #ddeeec;
-    /* background-color:  rgb(174, 226, 169); */
     border-radius: 8px;
 }
-.mainResultados, .mainCarritoCompras{
+.mainResultados{
     display: flex;
     flex-wrap: wrap; 
     gap: 15px;
@@ -196,11 +118,10 @@ body {
     max-width: 100%;
     border-radius: 8px;
 }
-.articuloEncontrado, .carritoComprasArticulo, .articuloNuevo{
+.articuloDisponible{
     display: flex;
     flex-direction: column;
     gap: 8px;
-    /* background-color: rgb(174, 226, 169); */
     background-color: rgb(164, 240, 167);
     max-width: 100%;
     border: 1px solid rgb(47, 134, 39);
@@ -244,13 +165,35 @@ body {
     color: green;
     font-weight: bold;
 }
-.inputCard{
-    text-align: right;
-    font-size: 14px;
+.contenedorCardCantidad{
+    display: flex;
+    justify-content: center;
+    gap: 0.25rem;
+    padding: 0.25rem;
 }
-.totalArticuloBuscado, .totalArticuloComprado{
-    font-size: 14px;
-    padding: 5px;
+.contenedorElementosCardCantidad {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+}
+.botonCantidad {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  background-color: green;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-items: center;
+  justify-content: center;
+}
+.spanCantidad{
+    color: green;
+    font-weight: bold;
 }
 .contenedorCardDatosBoton{
     display: flex;
@@ -267,34 +210,9 @@ body {
     justify-content: center; 
     align-items: center; 
 }
-/******************
-   CLASES GLOBALES
-*******************/
-.buttonGlobal {
-    color: white;
-    background-color: green;
-    width: 100%;
-    padding: 0.25rem;
-    font-size: 1.5rem;
-    border-radius: 5px;
-}
-/******************
-   CLASES MENSAJE DIALOG
-*******************/
-.mensajeDialog {
-    width: 350px;
-    padding: 25px;
-    border: none;
-    background-color: rgb(194, 178, 225);
-    color: rgb(1, 61, 1);
-    border-radius: 8px;
-    text-align: center;
-    justify-self: center;
-    align-self: center;
-}
-/******************
-   CLASES CARRITO DE COMPRAS BOTONES
-*******************/
+/***********************
+*  CLASES CARRITO COMPRAS BOTONES
+**************************/
 .mainContenedorCarritoComprasBotones{
     display: flex;
     flex-direction: column;
@@ -316,92 +234,4 @@ body {
 .tituloBotonesCarrito {
     color: green;
     padding: 0.5rem;
-}
-.mainCarritoComprasTotalArticulo{
-    color: green;
-    padding: 0.5rem;
-    text-align: center;
-    font-weight: bold;
-}
-.mainCarritoComprasBotones .buttonGlobal {
-    color: white;
-    background-color: green;
-    width: 80%;
-    font-size: bold;
-    padding: 0.25rem;
-    font-size: 1.5rem;
-    border-radius: 5px;
-}
-/******************************
-   MAIN CARRITO COMPRAS RESULTADOS
-*********************************/
-.totalCarrito{
-    text-align: center;
-    color: green;
-    font-weight: bold;
-    font-size: 20px;
-    padding: 5px;
-}
-.toastLargoTop{
-    color:whitesmoke;
-    background-color: green;
-    border: 2px solid greenyellow;
-    position: fixed;
-    border-radius: 15px;
-    padding: 20px 100px 20px 100px;
-    top: 10%;
-    left: 24%;
-    z-index: 1000;
-    font-size: 30px;
-    word-break: normal;
-    overflow-wrap: break-word;
-    width: 900px;
-    text-align: center;
-}
-.toastTransaccionTop{
-    color: #ddeeec;
-    background-color:  green;
-    border: 2px solid  greenyellow;
-    position: fixed;
-    border-radius: 15px;
-    padding: 20px 10px 20px 10px;
-    top: 10%;
-    left: 70%;
-    z-index: 1000;
-    font-size: 20px;
-    font-weight: bold;
-    overflow-wrap: break-word;
-    align-items: center;
-}
-
-.contenedorResultadoCantidad, .contenedorCarritoCantidad {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 2rem;
-}
-
-.botonCantidad {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  border: none;
-  background-color: green;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-items: center;
-  justify-content: center;
-}
-.resultadoCantidadDiv{
-    display: flex;
-    justify-content: center;
-    gap: 0.25rem;
-    padding: 0.25rem;
-}
-.spanCantidad{
-    color: green;
-    font-weight: bold;
 }

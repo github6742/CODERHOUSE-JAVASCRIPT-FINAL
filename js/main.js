@@ -1,7 +1,7 @@
 let listaPrecioArticulos = [];
 let carritoCompras = [];
 let carritoComprasFinalizadas = [];
-let articulosEncontrados = [];
+let articulosDisponibles = [];
 
 const url = "./db/data.json";
 class Articulo {
@@ -116,15 +116,15 @@ function datosStorageCarritoComprasFinalizadas(){
   };
 }
 
-function datosStorageArticulosEncontrados(){
-  let articulosEncontradosStorage = (JSON.parse(localStorage.getItem("articulosEncontrados")) == null) ? ([]) : JSON.parse(localStorage.getItem("articulosEncontrados"));
-  if (articulosEncontradosStorage.length > 0) {
-      localStorage.setItem("articulosEncontrados",JSON.stringify([...articulosEncontradosStorage]));
-      articulosEncontrados = [...articulosEncontradosStorage];
-  } else {
-      localStorage.setItem("articulosEncontrados",JSON.stringify([...listaPrecioArticulos]));
-      articulosEncontrados = [...listaPrecioArticulos];
-  }
+function datosStorageArticulosDisponibles(){
+  let articulosDisponiblesStorage = (JSON.parse(localStorage.getItem("articulosDisponibles")) == null) ? ([]) : JSON.parse(localStorage.getItem("articulosDisponibles"));
+  if (articulosDisponiblesStorage.length > 0) {
+      localStorage.setItem("articulosDisponibles",JSON.stringify([...articulosDisponiblesStorage]));
+      articulosDisponibles = [...articulosDisponiblesStorage];
+  } //else {
+  //    localStorage.setItem("articulosEncontrados",JSON.stringify([...listaPrecioArticulos]));
+  //    articulosEncontrados = [...listaPrecioArticulos];
+  //}
 }
 
 async function inicioModulo(){
