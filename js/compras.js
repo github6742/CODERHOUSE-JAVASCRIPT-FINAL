@@ -15,7 +15,7 @@ const tagMainContenedorCarritoCompras = document.getElementById("idMainContenedo
 const tagTotalCarrito = document.getElementById("idTotalCarrito");
 const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
 
-//obtiene los articulos
+//obtiene los articulos disponibles, para el evento de filtrar por categoria
 function obtenerArticulosDisponiblesDatosFiltros(){
   if (tagBuscarArticuloCategoria) {
      let listaFiltro = [];
@@ -35,7 +35,7 @@ function obtenerArticulosDisponiblesDatosFiltros(){
      localStorage.setItem("articulosDisponibles",JSON.stringify(articulosDisponibles));
   };
 };
-
+// obtiene los articulos disponibles al inicio del modulo
 function obtenerArticulosDisponiblesDatos(){   
   let articuloDisponible = {};
   //inicio
@@ -50,7 +50,7 @@ function obtenerArticulosDisponiblesDatos(){
       localStorage.setItem("articulosDisponibles",JSON.stringify(articulosDisponibles));
   };
 };
-
+// agrega los card de articulos disponibles en el contenedor de resultados
 function agregarArticulosDisponiblesHtml(){
   if (tagMainResultados) {
      tagMainResultados.innerHTML = ``;
@@ -102,13 +102,99 @@ function agregarArticulosDisponiblesHtml(){
      });
    };
 }; 
+// genera los listeners de articulos disponibles: listener de agregar al carrito y cambio de cantidad del articulo
+function agregarCarritoComprasListeners(){
+  let tagBotonEliminar;
+  let tagBotonRestarCantidad;
+  let tagBotonSumarCantidad;
 
+  carritoCompras.forEach(articuloCC => {  
+
+    tagBotonEliminar = document.getElementById("idBotonEliminarArticuloCC"+articuloCC.id);
+    (tagBotonEliminar) && (tagBotonEliminar.addEventListener("click", (e) => { e.preventDefault();
+                                                                               carritoCompras = carritoCompras.filter(articulo => articulo.id != articuloCC.id);
+                                                                               localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
+                                                                               renderizarCarritoCompras()
+                                                                              }));    
+
+    tagBotonRestarCantidad = document.getElementById("idBotonRestarCC"+articuloCC.id);
+    (tagBotonRestarCantidad) && (tagBotonRestarCantidad.addEventListener("click", (e) => { e.preventDefault();cambiarCantidadCC(articuloCC.id,-1)}));  
+
+    tagBotonSumarCantidad = document.getElementById("idBotonSumarCC"+articuloCC.id);
+    (tagBotonSumarCantidad) && (tagBotonSumarCantidad.addEventListener("click", (e) => { e.preventDefault();cambiarCantidadCC(articuloCC.id,1)})); 
+
+  });  
+};
+// render carrito compras
+function renderizarCarritoCompras(){
+  if (carritoCompras.length > 0 ){
+    if (tagMainCarritoCompras) {
+       tagMainCarritoCompras.innerHTML=``;
+       carritoCompras.forEach(articulo => {
+       const tagArticuloCarritoCompras = document.createElement("div");
+       tagArticuloCarritoCompras.id = "idArticuloCarritoCompras"+articulo.id;
+       tagArticuloCarritoCompras.className = "articuloCarritoCompras";
+       tagMainCarritoCompras.appendChild(tagArticuloCarritoCompras);
+
+       contenidoHtml = ` <div class="contenedorCard">  
+                          <div class="contenedorCardDatos">
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Codigo:</p><p class="cardDatosFilaValor">${articulo.codigo.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Nombre:</p><p class="cardDatosFilaValor">${articulo.nombre.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${articulo.marca.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Categoria:</p><p class="cardDatosFilaValor">${articulo.categoria.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(articulo.precio)}</p>  
+                            </div>
+                          </div>
+                         <div id="idContenedorCardCantidadCC${articulo.id}" class="contenedorCardCantidad">                                        
+                              <div class="contenedorElementosCardCantidad">
+                                <button id="idBotonRestarCC${articulo.id}" class="botonCantidad">-</button>
+                                <span id="idCantidadSpanCC${articulo.id}" class="spanCantidad">${articulo.cantidad}</span>
+                                <button id="idBotonSumarCC${articulo.id}" class="botonCantidad">+</button>
+                              </div>                              
+                         </div>
+                          <div class="contenedorCardDatosFila">
+                              <p id="idTotalArticuloCC${articulo.id}" class="labelCard">Total: ${formatearImporte(articulo.cantidad*articulo.precio)}</p>
+                          </div>
+                          <div class="contenedorCardDatosBoton">
+                            <button id="idBotonEliminarArticuloCC${articulo.id}" class="buttonCard">ELIMINAR</button>
+                          </div>  
+                        </div>
+                        `;
+        tagArticuloCarritoCompras.innerHTML = contenidoHtml;
+      });  
+    };
+    agregarCarritoComprasListeners();
+  };
+};
+// agrega el articulo disponible al carrito de compras
+function agregarAlCarritoCompras(articuloId){
+  if (carritoCompras.some(articulo => parseInt(articulo.id) === parseInt(articuloId))) {
+     crearMensajeTransaccionToast("El articulo ya existe en el carrito de compras");
+  } else {
+    crearMensajeTransaccionToast("Agregando articulo al carrito..."); 
+    const articulo = articulosDisponibles.find(articulo => articulo.id === articuloId);
+    carritoCompras.push(articulo);
+    localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));    
+  };    
+};
+// realiza el cambio de cantidad en el card de articulo disponible y en el storage de articulosDisponibles
 function cambiarCantidad(articuloId, cantidad){
   const tagCantidad = document.getElementById("idCantidadSpan"+articuloId);  
   const articulo = articulosDisponibles.find(articulo => articulo.id === articuloId);
   let cantidadActual = Number(articulo.cantidad);
   if (tagCantidad) {
-     console.log("cantidadActual: " + cantidadActual);
      if (cantidadActual === 1 && cantidad === -1) {
         cantidadActual = 1;
      } else {
@@ -119,7 +205,23 @@ function cambiarCantidad(articuloId, cantidad){
      localStorage.setItem("articulosDisponibles",JSON.stringify(articulosDisponibles))
   };
 };
-
+// realiza el cambio de cantidad en el card de articulo DEL CARRITO y en el storage del carrito
+function cambiarCantidadCC(articuloId, cantidad){
+  const tagCantidad = document.getElementById("idCantidadSpanCC"+articuloId);  
+  const articulo = carritoCompras.find(articulo => articulo.id === articuloId);
+  let cantidadActual = Number(articulo.cantidad);
+  if (tagCantidad) {
+     if (cantidadActual === 1 && cantidad === -1) {
+        cantidadActual = 1;
+     } else {
+        cantidadActual += cantidad;
+     };
+     articulo.cantidad = Number(cantidadActual);
+     tagCantidad.innerHTML = Number(cantidadActual);
+     localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras))
+  };
+};
+// genera los listeners de articulos disponibles: listener de agregar al carrito y +/- de cantidad del articulo
 function agregarArticulosDisponiblesListeners(){
   let tagBotonAgregar;
   let tagBotonRestarCantidad;
@@ -128,7 +230,10 @@ function agregarArticulosDisponiblesListeners(){
   articulosDisponibles.forEach(articulo => {  
 
     tagBotonAgregar = document.getElementById("idBotonAgregarArticuloDisponible"+articulo.id);
-    (tagBotonAgregar) && (tagBotonAgregar.addEventListener("click", (e) => {e.preventDefault();agregarAlCarrito(articulo.id)}));    
+    (tagBotonAgregar) && (tagBotonAgregar.addEventListener("click", (e) => { e.preventDefault();
+                                                                             agregarAlCarritoCompras(articulo.id);
+                                                                             renderizarCarritoCompras();
+                                                                           }));    
 
     tagBotonRestarCantidad = document.getElementById("idBotonRestar"+articulo.id);
     (tagBotonRestarCantidad) && (tagBotonRestarCantidad.addEventListener("click", (e) => {e.preventDefault();cambiarCantidad(articulo.id,-1)}));  
@@ -136,36 +241,32 @@ function agregarArticulosDisponiblesListeners(){
     tagBotonSumarCantidad = document.getElementById("idBotonSumar"+articulo.id);
     (tagBotonSumarCantidad) && (tagBotonSumarCantidad.addEventListener("click", (e) => {e.preventDefault();cambiarCantidad(articulo.id,1)})); 
 
-  });
-  
+  });  
 } 
-
+// render articulos Disponibles
 function renderizarArticulosDisponibles(){
   obtenerArticulosDisponiblesDatos();
   agregarArticulosDisponiblesHtml();
   agregarArticulosDisponiblesListeners();
 };
-
+// inicio de compras
 async function inicioCompras(){
+  // inicia el modulo
   if (localStorage.getItem("inicioModulo") == "NO" || localStorage.getItem("inicioModulo") == null) {
      await inicioModulo();
   }
-
+  // obtiene los datos de storage
   datosStorageListaPrecios();
   datosStorageCarritoCompras();
   datosStorageArticulosDisponibles();
-
+  //obtiene el storage de categoria
   document.getElementById("idBuscarArticuloCategoria").value = localStorage.getItem("idBuscarArticuloCategoria") || "";
-  //buscarArticulosHtml(articulosEncontrados);
-
+  // render articulos disponibles
   renderizarArticulosDisponibles();
-
+  // verifica si el carrtio estaba oculto, antes de renderizar
   if (localStorage.getItem("carritoComprasOculto") == "NO" || localStorage.getItem("carritoComprasOculto") == null) {
-     //verCarritoCompras();
-     //renderizarCarritoCompras();
-     console.log("renderizar carrito Compras")
+     renderizarCarritoCompras();
   };
-
 };
-
+//inicia compras
 inicioCompras();
