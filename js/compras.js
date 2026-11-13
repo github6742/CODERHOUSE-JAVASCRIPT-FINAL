@@ -1,3 +1,20 @@
+
+const tagIdMainContenedor = document.getElementById("idMainContenedor");
+const tagIdMainContenedorElementos = document.getElementById("idMainContenedorElementos");
+const tagIdBuscarArticuloCategoria = document.getElementById("idBuscarArticuloCategoria");
+const tagIdMainContenedorResultados = document.getElementById("idMainContenedorResultados");
+const tagIdMainResultados = document.getElementById("idMainResultados");
+const tagIdTituloBotonesCarrito = document.getElementById("idTituloBotonesCarrito");
+const tagIdMainContenedorCarritoComprasBotones = document.getElementById("idMainContenedorCarritoComprasBotones");
+const tagIdMainCarritoComprasBotones = document.getElementById("idMainCarritoComprasBotones");
+const tagIdBotonVerCarritoCompras = document.getElementById("idBotonVerCarritoCompras");
+const tagIdBotonOcultarCarritoCompras = document.getElementById("idBotonOcultarCarritoCompras");
+const tagIdBotonVaciarCarritoCompras = document.getElementById("idBotonVaciarCarritoCompras");
+const tagIdBotonConfirmarCarritoCompras = document.getElementById("idBotonConfirmarCarritoCompras");
+const tagIdMainContenedorCarritoCompras = document.getElementById("idMainContenedorCarritoCompras");
+const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+const tagIdMainCarritoCompras = document.getElementById("idMainCarritoCompras");
+/*
 function eliminarDelCarritoDatos(articuloId){
   carritoCompras = carritoCompras.filter((articulo) => articulo.id != articuloId);
   localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
@@ -98,7 +115,7 @@ function imprimirTotalImporteArticuloCompradoN(articuloId, cantidad, precio){
 }
 
  
-//********************************1
+
 function imprimirTotalImporteArticuloBuscadoN(articuloId, cantidad, precio){
   //const tagIdTotalArticuloComprado = document.getElementById("idTotalArticuloComprado"+articuloId);
   //(tagIdTotalArticuloComprado) && (tagIdTotalArticuloComprado.innerText="Total: "+(formatearImporte(cantidad*precio)));
@@ -446,7 +463,7 @@ const articulo = listaPrecioArticulos.find(articulo=>articulo.id == articuloId);
           //     };
           //  };
            
-           //*******************************************************1
+           
            imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
            //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
            //if (tagIdTotalArticuloBuscado){
@@ -476,7 +493,7 @@ function sumarCantidadArticuloBuscadoN(articuloId){
           //     tagResultadoCantidadSpan.innerText = cantidadResultado;
           //  };
 
-           //*****************************************************1
+           
            imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
            //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
            //if (tagIdTotalArticuloBuscado){
@@ -513,7 +530,7 @@ function buscarArticulosHtml(lista){
       //         };
       //      };
            
-      //      //*******************************************************1
+      //    
       //      imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
       //      //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
       //      //if (tagIdTotalArticuloBuscado){
@@ -538,7 +555,7 @@ function buscarArticulosHtml(lista){
       //         tagResultadoCantidadSpan.innerText = cantidadResultado;
       //      };
 
-      //      //*****************************************************1
+      //     
       //      imprimirTotalImporteArticuloBuscadoN(articulo.id, cantidadResultado, articulo.precio);
       //      //const tagIdTotalArticuloBuscado = document.getElementById("idTotalArticuloBuscado"+articulo.id);
       //      //if (tagIdTotalArticuloBuscado){
@@ -881,9 +898,10 @@ async function inicioCompras(){
   buscarArticulosHtml(articulosEncontrados);
 
   if (localStorage.getItem("carritoComprasOculto") == "NO" || localStorage.getItem("carritoComprasOculto") == null) {
-     verCarritoCompras();
+     //verCarritoCompras();
+     console.log("verCarritoCompras")
   };
 
 }
-
+*/
 inicioCompras();
