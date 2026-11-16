@@ -28,6 +28,15 @@ body {
     font-size: 1.5rem;
     border-radius: 5px;
 }
+.inputButtonFile {
+    color: white;
+    background-color: green;
+    /* width: 80%; */
+    font-size: bold;
+    padding: 0.25rem;
+    font-size: 1.5rem;
+    border-radius: 5px;
+}
 /******************
    CLASES HEADER
 *******************/
@@ -123,71 +132,44 @@ body {
     flex-direction: column;
     gap: 8px;
     background-color: rgb(164, 240, 167);
-    width: 12rem; /* O el ancho fijo que prefieras para la card *//*nuevo*****/
+    width: 12rem;
     max-width: 100%;
     border: 1px solid rgb(47, 134, 39);
     border-radius: 0.5rem;
     margin-top: 15px;
     margin-bottom: 15px;
     margin: 15px;
-    box-sizing: border-box;/*nuevoooooooooooo*/
-    padding: 0.5rem; /* Espacio interno para que no toque los bordes *//*nuevoooooooooooooo****/
+    box-sizing: border-box;
+    padding: 0.5rem; 
 }
 .contenedorCard{  
-    /* height: 20rem; *//*nuevooooooooooooooooooo*/
-    min-height: 20rem; /* Cambiado de height a min-height para que crezca si el texto baja *//*nuevoooooooooo*/
+    min-height: 20rem;
     width: 100%; 
-    /* width: 10rem;  *//*nuevoooooooooooooooooooooooo*/
-    justify-content: space-between;/*********nuevooooooo*/
+    justify-content: space-between;
     display: flex; 
     flex-direction: column;
-    /* align-content: center;
-    justify-content: center; */ /************nuevoooo*/
 }
-/* .contenedorCardDatos {
-    height: 15rem;
-    width: 100%;
-    max-width: 100%;nuevooooooooooooooo
-} */
-
-.contenedorCardDatos {/************nuevoooooo*/
+.contenedorCardDatos {
     width: 100%;
 }
-/* .contenedorCardDatosFila{
-    display: flex;
-    gap: 0.25rem;nuevooooooooooooooooo*
-    padding: 0.25rem;
-} */
- .contenedorCardDatosFila {
+.contenedorCardDatosFila {
     display: flex;
     gap: 0.25rem;
     padding: 0.25rem;
     width: 100%;
     box-sizing: border-box;
 }
-/* .cardDatosFilaEtiqueta{
-    min-width: 40%;
-    font-size: 14px; nuevooooooooooooooooo
-    color: green;
-} */
- .cardDatosFilaEtiqueta {
+.cardDatosFilaEtiqueta {
     width: 40%;
-    flex-shrink: 0; /* Evita que la etiqueta se aplaste */
+    flex-shrink: 0; 
     font-size: 14px;
     color: green;
     margin: 0;
 }
-/* .cardDatosFilaValor{
-    word-break: break-word;
-    overflow-wrap: break-word;
-    font-size: 14px;
-    color: green;
-    font-weight: bold; nuevooooooooooooo
-} */
- .cardDatosFilaValor {
-    min-width: 0; /* CLAVE: Permite que el texto se encoja dentro de Flexbox */
-    flex: 1;      /* Ocupa el 60% restante */
-    overflow-wrap: anywhere; /* Corta códigos largos sin espacios en cualquier letra */
+.cardDatosFilaValor {
+    min-width: 0; 
+    flex: 1;      
+    overflow-wrap: anywhere; 
     word-break: break-word;
     font-size: 14px;
     color: green;
@@ -279,10 +261,7 @@ body {
     padding: 10px;
     color: green;
     background-color: rgb(164, 240, 167);
-    /* background-color:  #ddeeec; */
     width: 90%; 
-    /* margin-top: 10px;
-    margin-bottom: 10px; */
 }
 .totalCarrito{
     text-align: center;
@@ -327,3 +306,24 @@ body {
 .mainFormularioFila .buttonGlobal{
     width: 100%;
 }
+.contenedorCardImagen {
+  width: 100%;
+  height: 120px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: white;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+  box-sizing: border-box;
+}
+.cardImagen {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  display: block;
+}
+

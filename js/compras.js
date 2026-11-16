@@ -14,6 +14,7 @@ const tagBotonConfirmarCarritoCompras = document.getElementById("idBotonConfirma
 const tagMainContenedorCarritoCompras = document.getElementById("idMainContenedorCarritoCompras");
 const tagTotalCarrito = document.getElementById("idTotalCarrito");
 const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
+const urlPathImagesCompras = "./assets/img/";
 
 function actualizarTotalCarrito(){
    if (tagTotalCarrito) {
@@ -29,11 +30,8 @@ function obtenerArticulosDisponiblesDatosFiltros(){
      let articuloDisponible = {};
 
      const categoria = tagSelectCategoria.value.toUpperCase();
-     //console.log.log("obtenerArticulosDisponiblesDatosFiltros-categoria: " + categoria);
      listaFiltro = (categoria.length === 0) ? [...listaPrecioArticulos] :
                    listaPrecioArticulos.filter(articulo => articulo.categoria.toUpperCase().includes(categoria.toUpperCase()));
-     //console.log.log("listaFiltro");
-     //console.log.log(listaFiltro);
      articulosDisponibles.splice(0,articulosDisponibles.length);
      listaFiltro.forEach(articulo =>{
              articuloDisponible = {
@@ -74,6 +72,9 @@ function agregarArticulosDisponiblesHtml(){
 
        contenidoHtml = ` <div class="contenedorCard">
                           <div class="contenedorCardDatos">
+                            <div class="contenedorCardImagen">
+                                <img src="${urlPathImagesCompras}${articulo.imagen}" class="cardImagen">
+                            </div>
                             <div class="contenedorCardDatosFila">
                                 <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
                             </div>
@@ -150,6 +151,9 @@ function renderizarCarritoCompras(){
 
        let contenidoHtml = ` <div class="contenedorCard">  
                           <div class="contenedorCardDatos">
+                            <div class="contenedorCardImagen">
+                                <img src="${urlPathImagesCompras}${articulo.imagen}" class="cardImagen">
+                            </div>
                             <div class="contenedorCardDatosFila">
                                 <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
                             </div>
@@ -287,15 +291,11 @@ async function inicioCompras(){
 inicioCompras();
 
 tagSelectCategoria.addEventListener("change", (e) => {
-    //console.log.log("listener select categoria")
     e.preventDefault();
-    //console.log.log("e.preventdefault")
     obtenerArticulosDisponiblesDatosFiltros();
-    //console.log.log("obtenerArticulosDisponiblesDatosFiltros")
     renderizarArticulosDisponibles();
-    //console.log.log("renderizarArticulosDisponibles")
 });
-//
+// mensaje de confirmacion del carrito
 async function confirmarCarritoCompras(){
   if (carritoCompras.length === 0) {
      crearMensajeTransaccionToast("El carrito de compras esta vacio"); 
@@ -385,8 +385,6 @@ async function confirmarCarritoCompras(){
 
 tagBotonVerCarritoCompras.addEventListener("click", (e) => {
     e.preventDefault();
-    //datosStorageCarritoCompras();
-    //console.log.log("listener boton ver carrito")
     if (carritoCompras.length === 0) {
         crearMensajeTransaccionToast("El carrito de compras esta vacio");
     } else {
@@ -396,7 +394,6 @@ tagBotonVerCarritoCompras.addEventListener("click", (e) => {
 
 tagBotonOcultarCarritoCompras.addEventListener("click", (e) => {
    e.preventDefault();
-   //console.log.log("listener boton ocultar carrito");
    if (carritoCompras.length > 0) {
       if (tagMainCarritoCompras) {
          if (tagMainCarritoCompras.childElementCount === 0) {
@@ -414,7 +411,6 @@ tagBotonOcultarCarritoCompras.addEventListener("click", (e) => {
 
 tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
    e.preventDefault();    
-   //console.log.log("listener boton vaciar carrito")
    if (carritoCompras.length > 0) {
       if (tagMainCarritoCompras) {
          if (tagMainCarritoCompras.childElementCount === 0) {
@@ -451,6 +447,5 @@ tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
 
 tagBotonConfirmarCarritoCompras.addEventListener("click", (e) => {
    e.preventDefault();
-   //console.log.log("listener boton confirmar carrito")
    confirmarCarritoCompras();
 });

@@ -11,13 +11,15 @@ class Articulo {
                   nombre, 
                   marca,
                   categoria,
-                  precio){
+                  precio,
+                  imagen){
         this.id = id,
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;
         this.categoria = categoria;
         this.precio = precio;
+        this.imagen = imagen;
       };
 };
 

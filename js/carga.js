@@ -1,4 +1,3 @@
-//
 const tagFormCrearArticulo = document.getElementById("idMainFormularioCrear");
 const tagMainResultados = document.getElementById("idMainResultadosArtCreado");
 const tagMainContenedorResultadosArtCreado = document.getElementById("idMainContenedorResultadosArtCreado");
@@ -8,20 +7,32 @@ const tagSelectCrearArticuloCategoria = document.getElementById("idCrearArticulo
 const tagInputCrearArticuloMarca = document.getElementById("idCrearArticuloMarca");
 const tagInputCrearArticuloNombre = document.getElementById("idCrearArticuloNombre");
 const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodigo");
-//
+const tagInputCrearArticuloImagen = document.getElementById("idCrearArticuloImagen");
+const urlPathImagesCarga = "../assets/img/";
+
 
 function guardarDatosFormulario(){
+  let imagenName;
+  if (tagInputCrearArticuloImagen) {    
+    const imagen = tagInputCrearArticuloImagen.files[0];
+    if (imagen) {
+      imagenName = imagen.name;
+    } else {        
+      imagenName = "00-sin-imagen.webp";
+    };
+  };
   const valores = 
   {
     codigo: document.getElementById("idCrearArticuloCodigo").value,
     nombre: document.getElementById("idCrearArticuloNombre").value,
     marca: document.getElementById("idCrearArticuloMarca").value,
     categoria: document.getElementById("idCrearArticuloCategoria").value,
-    precio: parseFloat(document.getElementById("idCrearArticuloPrecio").value)
+    precio: parseFloat(document.getElementById("idCrearArticuloPrecio").value),
+    imagen: imagenName
   }
   localStorage.setItem("articuloFormulario", JSON.stringify(valores));
 };
-//
+
 function agregarArticuloNuevosListeners() {
   if (articulosNuevos.length > 0) {
      articulosNuevos.forEach(articulo => {
@@ -47,7 +58,7 @@ function agregarArticuloNuevosListeners() {
     });
   };  
 };
-//
+
 function cargarDatosStorage(){
   datosStorageListaPrecios();
   datosStorageArticulosDisponibles();
@@ -58,14 +69,23 @@ function cargarArticulo(e){
   e.preventDefault();
   
   cargarDatosStorage();
-
   const selectCategoria = localStorage.getItem("idSelectCategoria");
   const codigo = document.getElementById("idCrearArticuloCodigo").value;
   const nombre = document.getElementById("idCrearArticuloNombre").value;
   const marca = document.getElementById("idCrearArticuloMarca").value;
   const categoria = document.getElementById("idCrearArticuloCategoria").value;
   const precio = document.getElementById("idCrearArticuloPrecio").value;
-  
+  const tagInputCrearArticuloImagen = document.getElementById("idCrearArticuloImagen");
+  let imagenName;
+  if (tagInputCrearArticuloImagen) {    
+    const imagen = tagInputCrearArticuloImagen.files[0];
+    if (imagen) {
+      imagenName = imagen.name;
+   } else {
+      imagenName = "00-sin-imagen.webp";
+   };
+  }; 
+    
   if (listaPrecioArticulos.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )){
      crearMensajeTransaccionToast("Ya existe un articulo con ese codigo");
   } else if (listaPrecioArticulos.some(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase() )){
@@ -77,14 +97,16 @@ function cargarArticulo(e){
                                         nombre.toUpperCase(), 
                                         marca.toUpperCase(), 
                                         categoria.toUpperCase(), 
-                                        parseFloat(precio));
+                                        parseFloat(precio),
+                                        imagenName);
      const elementoNuevo = {
            id: articuloNuevo.id, 
            codigo: articuloNuevo.codigo,
            nombre: articuloNuevo.nombre,
            marca: articuloNuevo.marca,
            categoria: articuloNuevo.categoria,
-           precio: articuloNuevo.precio
+           precio: articuloNuevo.precio,
+           imagen: articuloNuevo.imagen
      };
   
      listaPrecioArticulos.push(elementoNuevo);
@@ -109,6 +131,9 @@ function cargarArticulo(e){
      document.getElementById("idCrearArticuloMarca").value = "";
      document.getElementById("idCrearArticuloCategoria").value = "";
      document.getElementById("idCrearArticuloPrecio").value = "";
+     if (document.getElementById("idCrearArticuloImagen").files[0]) {
+         document.getElementById("idCrearArticuloImagen").files[0]  = "";
+     }
 
      renderizarArticulosNuevos();
      agregarArticuloNuevosListeners();
@@ -125,10 +150,12 @@ function renderizarArticulosNuevos(){
             tagMainResultadosNuevo.appendChild(tagArticuloNuevo);
             tagArticuloNuevo.id = "idArticuloNuevo"+articulo.id;
             tagArticuloNuevo.className = "articuloNuevo";
-
             let contenidoHtml = ` 
                        <div class="contenedorCard">
                           <div class="contenedorCardDatos">
+                            <div class="contenedorCardImagen">
+                                <img src="${urlPathImagesCarga}${articulo.imagen}" class="cardImagen">
+                            </div>
                             <div class="contenedorCardDatosFila">
                                 <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
                             </div>
@@ -176,6 +203,13 @@ document.getElementById("idCrearArticuloNombre").value = articuloFormulario.nomb
 document.getElementById("idCrearArticuloMarca").value = articuloFormulario.marca || "";
 document.getElementById("idCrearArticuloCategoria").value = articuloFormulario.categoria || "";
 document.getElementById("idCrearArticuloPrecio").value = articuloFormulario.precio || "";
+ 
+if (tagInputCrearArticuloImagen) {
+   const imagen = tagInputCrearArticuloImagen.files[0];
+   if (imagen) {
+      tagInputCrearArticuloImagen.files[0].name = articuloFormulario.imagen || "";
+   };
+}; 
 
 tagFormCrearArticulo.addEventListener("submit", cargarArticulo);
 tagInputCrearArticuloCodigo.addEventListener("input", guardarDatosFormulario);
@@ -183,3 +217,4 @@ tagInputCrearArticuloNombre.addEventListener("input",guardarDatosFormulario);
 tagInputCrearArticuloMarca.addEventListener("input",guardarDatosFormulario);
 tagSelectCrearArticuloCategoria.addEventListener("change",guardarDatosFormulario);
 tagInputCrearArticuloPrecio.addEventListener("input",guardarDatosFormulario);
+tagInputCrearArticuloImagen.addEventListener("change",guardarDatosFormulario);
