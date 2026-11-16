@@ -1,13 +1,15 @@
 //
 const tagFormCrearArticulo = document.getElementById("idMainFormularioCrear");
 const tagMainResultados = document.getElementById("idMainResultadosArtCreado");
+const tagMainContenedorResultadosArtCreado = document.getElementById("idMainContenedorResultadosArtCreado");
 const tagMainResultadosNuevo = document.getElementById("idMainResultadosArtCreado");
 const tagInputCrearArticuloPrecio = document.getElementById("idCrearArticuloPrecio");
-const tagInputCrearArticuloCategoria = document.getElementById("idCrearArticuloCategoria");
+const tagSelectCrearArticuloCategoria = document.getElementById("idCrearArticuloCategoria");
 const tagInputCrearArticuloMarca = document.getElementById("idCrearArticuloMarca");
 const tagInputCrearArticuloNombre = document.getElementById("idCrearArticuloNombre");
 const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodigo");
 //
+
 function guardarDatosFormulario(){
   const valores = 
   {
@@ -18,68 +20,46 @@ function guardarDatosFormulario(){
     precio: parseFloat(document.getElementById("idCrearArticuloPrecio").value)
   }
   localStorage.setItem("articuloFormulario", JSON.stringify(valores));
-}
+};
+//
+function agregarArticuloNuevosListeners() {
+  if (articulosNuevos.length > 0) {
+     articulosNuevos.forEach(articulo => {
+      const botonEliminarNuevo = document.getElementById("idResultadosBotonAgregarArtNuevo"+articulo.id);
+      botonEliminarNuevo.addEventListener("click", (e) => {
+          e.preventDefault();
+          const tadArticuloNuevo = document.getElementById("idArticuloNuevo"+articulo.id);
 
-function agregarCardArticuloNuevo(articulo) {
-  let contenidoHtml;
-  let tagDivArticulo = document.createElement('div')
-  tagDivArticulo.id = "idArticuloNuevo"+articulo.id;
-  tagDivArticulo.className ="articuloNuevo";
-  tagMainResultados.appendChild(tagDivArticulo);
+          listaPrecioArticulos = listaPrecioArticulos.filter((articulon) => articulon.id != articulo.id);
+          localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
 
-  contenidoHtml = ` 
-                       <div class="contenedorCard">
-                          <div class="contenedorCardDatos">
-                            <div class="contenedorCardDatosFila">
-                                <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
-                            </div>
-                            <div class="contenedorCardDatosFila">
-                                <p class="cardDatosFilaEtiqueta">Codigo:</p><p class="cardDatosFilaValor">${articulo.codigo.toUpperCase()}</p>
-                            </div>
-                            <div class="contenedorCardDatosFila">
-                                <p class="cardDatosFilaEtiqueta">Nombre:</p><p class="cardDatosFilaValor">${articulo.nombre.toUpperCase()}</p>
-                            </div>
-                            <div class="contenedorCardDatosFila">
-                                <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${articulo.marca.toUpperCase()}</p>
-                            </div>
-                            <div class="contenedorCardDatosFila">
-                                <p class="cardDatosFilaEtiqueta">Categoria:</p><p class="cardDatosFilaValor">${articulo.categoria.toUpperCase()}</p>
-                            </div>
-                            <div class="contenedorCardDatosFila">
-                                <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(articulo.precio)}</p>  
-                            </div>
-                          </div>
-                          <div class="contenedorCardDatosBoton">
-                            <button id="idResultadosBotonAgregarArtNuevo${articulo.id}" class="buttonCard">ELIMINAR</button>
-                          </div>  
-                        </div>
-  `;
-  tagDivArticulo.innerHTML = contenidoHtml;
+          carritoCompras = carritoCompras.filter((articulon) => articulon.id != articulo.id);
+          localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
 
-  const botonEliminarNuevo = document.getElementById("idResultadosBotonAgregarArtNuevo"+articulo.id);
-  botonEliminarNuevo.addEventListener("click", (e) => {
-    e.preventDefault();
-    const tadIdArticuloNuevo = document.getElementById("idArticuloNuevo"+articulo.id);
-    
-    listaPrecioArticulos = listaPrecioArticulos.filter((articulon) => articulon.id != articulo.id);
-    localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
-    
-    articulosDisponibles = articulosDisponibles.filter((articulon) => articulon.id != articulo.id);
-    localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
-    
-    articulosNuevos = articulosNuevos.filter((articulon) => articulon.id != articulo.id);
-    localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
-    
-    tagMainResultadosNuevo.removeChild(tadIdArticuloNuevo);
-  });
-}
+          articulosDisponibles = articulosDisponibles.filter((articulon) => articulon.id != articulo.id);
+          localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
+
+          articulosNuevos = articulosNuevos.filter((articulon) => articulon.id != articulo.id);
+          localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
+
+          tagMainResultadosNuevo.removeChild(tadArticuloNuevo);
+      });    
+    });
+  };  
+};
+//
+function cargarDatosStorage(){
+  datosStorageListaPrecios();
+  datosStorageArticulosDisponibles();
+  datosStorageArticulosNuevos();
+};
 
 function cargarArticulo(e){
   e.preventDefault();
-  datosStorageListaPrecios();
-  datosStorageArticulosDisponibles();
   
-  const cat = localStorage.getItem("idBuscarArticuloCategoria");
+  cargarDatosStorage();
+
+  const selectCategoria = localStorage.getItem("idSelectCategoria");
   const codigo = document.getElementById("idCrearArticuloCodigo").value;
   const nombre = document.getElementById("idCrearArticuloNombre").value;
   const marca = document.getElementById("idCrearArticuloMarca").value;
@@ -118,7 +98,7 @@ function cargarArticulo(e){
       cantidad: 1
      };
 
-     if (cat == elementoNuevo.categoria || (cat == null)) {
+     if (selectCategoria == elementoNuevo.categoria || (selectCategoria == null)) {
         articulosDisponibles.push(articuloDisponibleNuevo)
         localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
      }
@@ -130,10 +110,65 @@ function cargarArticulo(e){
      document.getElementById("idCrearArticuloCategoria").value = "";
      document.getElementById("idCrearArticuloPrecio").value = "";
 
-     agregarCardArticuloNuevo(elementoNuevo);
+     renderizarArticulosNuevos();
+     agregarArticuloNuevosListeners();
      crearMensajeTransaccionToast("El articulo se creo satisfactoriamente");
   }  
 } 
+
+function renderizarArticulosNuevos(){
+   if (tagMainResultadosNuevo) {
+      if (articulosNuevos.length > 0 ){
+            tagMainResultadosNuevo.innerHTML = ``;
+          articulosNuevos.forEach(articulo => {
+            const tagArticuloNuevo = document.createElement("div");
+            tagMainResultadosNuevo.appendChild(tagArticuloNuevo);
+            tagArticuloNuevo.id = "idArticuloNuevo"+articulo.id;
+            tagArticuloNuevo.className = "articuloNuevo";
+
+            let contenidoHtml = ` 
+                       <div class="contenedorCard">
+                          <div class="contenedorCardDatos">
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Codigo:</p><p class="cardDatosFilaValor">${articulo.codigo.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Nombre:</p><p class="cardDatosFilaValor">${articulo.nombre.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${articulo.marca.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Categoria:</p><p class="cardDatosFilaValor">${articulo.categoria.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(articulo.precio)}</p>  
+                            </div>
+                          </div>
+                          <div class="contenedorCardDatosBoton">
+                            <button id="idResultadosBotonAgregarArtNuevo${articulo.id}" class="buttonCard">ELIMINAR</button>
+                          </div>  
+                        </div>
+              `;
+              tagArticuloNuevo.innerHTML = contenidoHtml;
+            });
+   };
+  };
+};
+
+function inicioCarga(){
+   datosStorageListaPrecios();
+   datosStorageCarritoCompras();
+   datosStorageArticulosDisponibles();
+   datosStorageArticulosNuevos();
+   renderizarArticulosNuevos();
+   agregarArticuloNuevosListeners();
+};
+
+inicioCarga();
 
 const articuloFormulario = JSON.parse(localStorage.getItem("articuloFormulario")) || {};
 document.getElementById("idCrearArticuloCodigo").value = articuloFormulario.codigo || "";
@@ -146,5 +181,5 @@ tagFormCrearArticulo.addEventListener("submit", cargarArticulo);
 tagInputCrearArticuloCodigo.addEventListener("input", guardarDatosFormulario);
 tagInputCrearArticuloNombre.addEventListener("input",guardarDatosFormulario);
 tagInputCrearArticuloMarca.addEventListener("input",guardarDatosFormulario);
-tagInputCrearArticuloCategoria.addEventListener("input",guardarDatosFormulario);
+tagSelectCrearArticuloCategoria.addEventListener("change",guardarDatosFormulario);
 tagInputCrearArticuloPrecio.addEventListener("input",guardarDatosFormulario);

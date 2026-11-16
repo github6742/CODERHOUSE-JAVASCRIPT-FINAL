@@ -107,7 +107,7 @@ function datosStorageCarritoCompras(){
       localStorage.setItem("carritoCompras", JSON.stringify([...carritoComprasStorage]));
       carritoCompras = [...carritoComprasStorage];
   };
-}
+};
 
 function datosStorageCarritoComprasFinalizadas(){  
   let carritoComprasFinalizadasStorage = (JSON.parse(localStorage.getItem("carritoComprasFinalizadas")) == null) ? ([]) : JSON.parse(localStorage.getItem("carritoComprasFinalizadas"));
@@ -115,29 +115,23 @@ function datosStorageCarritoComprasFinalizadas(){
       localStorage.setItem("carritoComprasFinalizadas", JSON.stringify([...carritoComprasFinalizadasStorage]));
       carritoComprasFinalizadas = [...carritoComprasFinalizadasStorage];
   };
-}
+};
 
 function datosStorageArticulosDisponibles(){
   let articulosDisponiblesStorage = (JSON.parse(localStorage.getItem("articulosDisponibles")) == null) ? ([]) : JSON.parse(localStorage.getItem("articulosDisponibles"));
   if (articulosDisponiblesStorage.length > 0) {
       localStorage.setItem("articulosDisponibles",JSON.stringify([...articulosDisponiblesStorage]));
       articulosDisponibles = [...articulosDisponiblesStorage];
-  } //else {
-  //    localStorage.setItem("articulosEncontrados",JSON.stringify([...listaPrecioArticulos]));
-  //    articulosEncontrados = [...listaPrecioArticulos];
-  //}
-}
+  };
+};
 
 function datosStorageArticulosNuevos(){
   let articulosNuevosStorage = (JSON.parse(localStorage.getItem("articulosNuevos")) == null) ? ([]) : JSON.parse(localStorage.getItem("articulosNuevos"));
   if (articulosNuevosStorage.length > 0) {
       localStorage.setItem("articulosNuevos",JSON.stringify([...articulosNuevosStorage]));
       articulosNuevos = [...articulosNuevosStorage];
-  } //else {
-  //    localStorage.setItem("articulosEncontrados",JSON.stringify([...listaPrecioArticulos]));
-  //    articulosEncontrados = [...listaPrecioArticulos];
-  //}
-}
+  }; 
+};
 
 async function inicioModulo(){
   const conectado = await peticion("Realizando conexion....");
@@ -145,4 +139,4 @@ async function inicioModulo(){
      await fetchBase();
      localStorage.setItem("inicioModulo","SI");
   };
-}
+};

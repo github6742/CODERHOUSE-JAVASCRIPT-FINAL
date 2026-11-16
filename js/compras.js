@@ -15,6 +15,12 @@ const tagMainContenedorCarritoCompras = document.getElementById("idMainContenedo
 const tagTotalCarrito = document.getElementById("idTotalCarrito");
 const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
 
+function actualizarTotalCarrito(){
+   if (tagTotalCarrito) {
+      const totalCarritoCompras = carritoCompras.reduce((sumador, articulo) => sumador + (articulo.precio*articulo.cantidad),0);
+      tagTotalCarrito.innerText= `Total Carrito Compras: ${formatearImporte(totalCarritoCompras)}`;
+  };
+};
 
 //obtiene los articulos disponibles, para el evento de filtrar por categoria
 function obtenerArticulosDisponiblesDatosFiltros(){
@@ -23,11 +29,11 @@ function obtenerArticulosDisponiblesDatosFiltros(){
      let articuloDisponible = {};
 
      const categoria = tagSelectCategoria.value.toUpperCase();
-     console.log("obtenerArticulosDisponiblesDatosFiltros-categoria: " + categoria);
+     //console.log.log("obtenerArticulosDisponiblesDatosFiltros-categoria: " + categoria);
      listaFiltro = (categoria.length === 0) ? [...listaPrecioArticulos] :
                    listaPrecioArticulos.filter(articulo => articulo.categoria.toUpperCase().includes(categoria.toUpperCase()));
-     console.log("listaFiltro");
-     console.log(listaFiltro);
+     //console.log.log("listaFiltro");
+     //console.log.log(listaFiltro);
      articulosDisponibles.splice(0,articulosDisponibles.length);
      listaFiltro.forEach(articulo =>{
              articuloDisponible = {
@@ -135,13 +141,14 @@ function renderizarCarritoCompras(){
   if (tagMainCarritoCompras){
      tagMainCarritoCompras.innerHTML=``;
     if  (carritoCompras.length > 0 ){
+       
        carritoCompras.forEach(articulo => {
        const tagArticuloCarritoCompras = document.createElement("div");
        tagArticuloCarritoCompras.id = "idArticuloCarritoCompras"+articulo.id;
        tagArticuloCarritoCompras.className = "articuloCarritoCompras";
        tagMainCarritoCompras.appendChild(tagArticuloCarritoCompras);
 
-       contenidoHtml = ` <div class="contenedorCard">  
+       let contenidoHtml = ` <div class="contenedorCard">  
                           <div class="contenedorCardDatos">
                             <div class="contenedorCardDatosFila">
                                 <p class="cardDatosFilaEtiqueta">Id:</p><p class="cardDatosFilaValor">${articulo.id}</p>
@@ -181,6 +188,7 @@ function renderizarCarritoCompras(){
         localStorage.setItem("carritoComprasOculto","NO");
       });  
     };
+    actualizarTotalCarrito();
     agregarCarritoComprasListeners();
   };
 };
@@ -279,13 +287,13 @@ async function inicioCompras(){
 inicioCompras();
 
 tagSelectCategoria.addEventListener("change", (e) => {
-    console.log("listener select categoria")
+    //console.log.log("listener select categoria")
     e.preventDefault();
-    console.log("e.preventdefault")
+    //console.log.log("e.preventdefault")
     obtenerArticulosDisponiblesDatosFiltros();
-    console.log("obtenerArticulosDisponiblesDatosFiltros")
+    //console.log.log("obtenerArticulosDisponiblesDatosFiltros")
     renderizarArticulosDisponibles();
-    console.log("renderizarArticulosDisponibles")
+    //console.log.log("renderizarArticulosDisponibles")
 });
 //
 async function confirmarCarritoCompras(){
@@ -316,6 +324,7 @@ async function confirmarCarritoCompras(){
    confirmButtonText: "Confirmar compra",
    cancelButtonText: "Cancelar",
    confirmButtonColor: "green",
+   cancelButtonColor: "red",
    preConfirm: () => {
        const nombre = document.getElementById("idSwalNombre").value;
        const email = document.getElementById("idSwalEmail").value;
@@ -377,7 +386,7 @@ async function confirmarCarritoCompras(){
 tagBotonVerCarritoCompras.addEventListener("click", (e) => {
     e.preventDefault();
     //datosStorageCarritoCompras();
-    console.log("listener boton ver carrito")
+    //console.log.log("listener boton ver carrito")
     if (carritoCompras.length === 0) {
         crearMensajeTransaccionToast("El carrito de compras esta vacio");
     } else {
@@ -387,7 +396,7 @@ tagBotonVerCarritoCompras.addEventListener("click", (e) => {
 
 tagBotonOcultarCarritoCompras.addEventListener("click", (e) => {
    e.preventDefault();
-   console.log("listener boton ocultar carrito");
+   //console.log.log("listener boton ocultar carrito");
    if (carritoCompras.length > 0) {
       if (tagMainCarritoCompras) {
          if (tagMainCarritoCompras.childElementCount === 0) {
@@ -405,16 +414,34 @@ tagBotonOcultarCarritoCompras.addEventListener("click", (e) => {
 
 tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
    e.preventDefault();    
-   console.log("listener boton vaciar carrito")
+   //console.log.log("listener boton vaciar carrito")
    if (carritoCompras.length > 0) {
       if (tagMainCarritoCompras) {
          if (tagMainCarritoCompras.childElementCount === 0) {
             crearMensajeTransaccionToast("El carrito de compras ya esta vacio");
          } else {
-            carritoCompras.splice(0,carritoCompras.length);
-            localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));
-            tagMainCarritoCompras.innerHTML=``;
-            (tagTotalCarrito) && (tagTotalCarrito.innerHTML=``);
+           Swal.fire({
+                title: "Desea vaciar el carrito?",
+                text: "Esta seguro?",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "green",
+                cancelButtonColor: "red",
+                confirmButtonText: "Si , borrarlo"
+           }).then((result) => {
+                    if (result.isConfirmed) {
+                       Swal.fire({
+                            title: "Eliminado",
+                            text: "El articulo ha sido borrado",
+                            icon: "success"
+                        });
+      
+                    carritoCompras.splice(0,carritoCompras.length);
+                    localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));
+                    tagMainCarritoCompras.innerHTML=``;
+                    (tagTotalCarrito) && (tagTotalCarrito.innerHTML=``);
+                   };
+           });           
          };
       };
    } else {
@@ -424,6 +451,6 @@ tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
 
 tagBotonConfirmarCarritoCompras.addEventListener("click", (e) => {
    e.preventDefault();
-   console.log("listener boton confirmar carrito")
+   //console.log.log("listener boton confirmar carrito")
    confirmarCarritoCompras();
 });
