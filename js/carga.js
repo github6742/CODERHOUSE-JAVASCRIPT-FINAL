@@ -67,6 +67,9 @@ function agregarCardArticuloNuevo(articulo) {
     articulosDisponibles = articulosDisponibles.filter((articulon) => articulon.id != articulo.id);
     localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
     
+    articulosNuevos = articulosNuevos.filter((articulon) => articulon.id != articulo.id);
+    localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
+    
     tagMainResultadosNuevo.removeChild(tadIdArticuloNuevo);
   });
 }
@@ -103,9 +106,12 @@ function cargarArticulo(e){
            categoria: articuloNuevo.categoria,
            precio: articuloNuevo.precio
      };
-
+  
      listaPrecioArticulos.push(elementoNuevo);
      localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
+     elementoNuevo.cantidad = 1;
+     articulosNuevos.push(elementoNuevo);
+     localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
 
      let articuloDisponibleNuevo = {
       ...elementoNuevo,

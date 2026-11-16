@@ -2,6 +2,7 @@ let listaPrecioArticulos = [];
 let carritoCompras = [];
 let carritoComprasFinalizadas = [];
 let articulosDisponibles = [];
+let articulosNuevos = [];
 
 const url = "./db/data.json";
 class Articulo {
@@ -121,6 +122,17 @@ function datosStorageArticulosDisponibles(){
   if (articulosDisponiblesStorage.length > 0) {
       localStorage.setItem("articulosDisponibles",JSON.stringify([...articulosDisponiblesStorage]));
       articulosDisponibles = [...articulosDisponiblesStorage];
+  } //else {
+  //    localStorage.setItem("articulosEncontrados",JSON.stringify([...listaPrecioArticulos]));
+  //    articulosEncontrados = [...listaPrecioArticulos];
+  //}
+}
+
+function datosStorageArticulosNuevos(){
+  let articulosNuevosStorage = (JSON.parse(localStorage.getItem("articulosNuevos")) == null) ? ([]) : JSON.parse(localStorage.getItem("articulosNuevos"));
+  if (articulosNuevosStorage.length > 0) {
+      localStorage.setItem("articulosNuevos",JSON.stringify([...articulosNuevosStorage]));
+      articulosNuevos = [...articulosNuevosStorage];
   } //else {
   //    localStorage.setItem("articulosEncontrados",JSON.stringify([...listaPrecioArticulos]));
   //    articulosEncontrados = [...listaPrecioArticulos];

@@ -265,6 +265,7 @@ async function inicioCompras(){
   datosStorageListaPrecios();
   datosStorageCarritoCompras();
   datosStorageArticulosDisponibles();
+  datosStorageArticulosNuevos();
   //obtiene el storage de categoria
   document.getElementById("idSelectCategoria").value = localStorage.getItem("idSelectCategoria") || "";
   // render articulos disponibles
