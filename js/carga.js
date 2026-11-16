@@ -1,3 +1,13 @@
+//
+const tagFormCrearArticulo = document.getElementById("idMainFormularioCrear");
+const tagMainResultados = document.getElementById("idMainResultadosArtCreado");
+const tagMainResultadosNuevo = document.getElementById("idMainResultadosArtCreado");
+const tagInputCrearArticuloPrecio = document.getElementById("idCrearArticuloPrecio");
+const tagInputCrearArticuloCategoria = document.getElementById("idCrearArticuloCategoria");
+const tagInputCrearArticuloMarca = document.getElementById("idCrearArticuloMarca");
+const tagInputCrearArticuloNombre = document.getElementById("idCrearArticuloNombre");
+const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodigo");
+//
 function guardarDatosFormulario(){
   const valores = 
   {
@@ -11,7 +21,6 @@ function guardarDatosFormulario(){
 }
 
 function agregarCardArticuloNuevo(articulo) {
-  const tagMainResultados = document.getElementById("idMainResultadosArtCreado");
   let contenidoHtml;
   let tagDivArticulo = document.createElement('div')
   tagDivArticulo.id = "idArticuloNuevo"+articulo.id;
@@ -34,6 +43,9 @@ function agregarCardArticuloNuevo(articulo) {
                                 <p class="cardDatosFilaEtiqueta">Marca:</p><p class="cardDatosFilaValor">${articulo.marca.toUpperCase()}</p>
                             </div>
                             <div class="contenedorCardDatosFila">
+                                <p class="cardDatosFilaEtiqueta">Categoria:</p><p class="cardDatosFilaValor">${articulo.categoria.toUpperCase()}</p>
+                            </div>
+                            <div class="contenedorCardDatosFila">
                                 <p class="cardDatosFilaEtiqueta">Precio:</p><p class="cardDatosFilaValor">${formatearImporte(articulo.precio)}</p>  
                             </div>
                           </div>
@@ -47,14 +59,13 @@ function agregarCardArticuloNuevo(articulo) {
   const botonEliminarNuevo = document.getElementById("idResultadosBotonAgregarArtNuevo"+articulo.id);
   botonEliminarNuevo.addEventListener("click", (e) => {
     e.preventDefault();
-    const tagMainResultadosNuevo = document.getElementById("idMainResultadosArtCreado");
     const tadIdArticuloNuevo = document.getElementById("idArticuloNuevo"+articulo.id);
     
     listaPrecioArticulos = listaPrecioArticulos.filter((articulon) => articulon.id != articulo.id);
     localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
     
-    articulosEncontrados = articulosEncontrados.filter((articulon) => articulon.id != articulo.id);
-    localStorage.setItem("articulosEncontrados", JSON.stringify(articulosEncontrados));
+    articulosDisponibles = articulosDisponibles.filter((articulon) => articulon.id != articulo.id);
+    localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
     
     tagMainResultadosNuevo.removeChild(tadIdArticuloNuevo);
   });
@@ -63,7 +74,7 @@ function agregarCardArticuloNuevo(articulo) {
 function cargarArticulo(e){
   e.preventDefault();
   datosStorageListaPrecios();
-  datosStorageArticulosEncontrados();
+  datosStorageArticulosDisponibles();
   
   const cat = localStorage.getItem("idBuscarArticuloCategoria");
   const codigo = document.getElementById("idCrearArticuloCodigo").value;
@@ -96,9 +107,14 @@ function cargarArticulo(e){
      listaPrecioArticulos.push(elementoNuevo);
      localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
 
+     let articuloDisponibleNuevo = {
+      ...elementoNuevo,
+      cantidad: 1
+     };
+
      if (cat == elementoNuevo.categoria || (cat == null)) {
-        articulosEncontrados.push(elementoNuevo)
-        localStorage.setItem("articulosEncontrados", JSON.stringify(articulosEncontrados));
+        articulosDisponibles.push(articuloDisponibleNuevo)
+        localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
      }
      
      localStorage.removeItem("articuloFormulario");
@@ -120,20 +136,9 @@ document.getElementById("idCrearArticuloMarca").value = articuloFormulario.marca
 document.getElementById("idCrearArticuloCategoria").value = articuloFormulario.categoria || "";
 document.getElementById("idCrearArticuloPrecio").value = articuloFormulario.precio || "";
 
-const tagFormCrearArticulo = document.getElementById("idMainFormularioCrear");
 tagFormCrearArticulo.addEventListener("submit", cargarArticulo);
-
-const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodigo");
 tagInputCrearArticuloCodigo.addEventListener("input", guardarDatosFormulario);
-
-const tagInputCrearArticuloNombre = document.getElementById("idCrearArticuloNombre");
 tagInputCrearArticuloNombre.addEventListener("input",guardarDatosFormulario);
-
-const tagInputCrearArticuloMarca = document.getElementById("idCrearArticuloMarca");
 tagInputCrearArticuloMarca.addEventListener("input",guardarDatosFormulario);
-
-const tagInputCrearArticuloCategoria = document.getElementById("idCrearArticuloCategoria");
 tagInputCrearArticuloCategoria.addEventListener("input",guardarDatosFormulario);
-
-const tagInputCrearArticuloPrecio = document.getElementById("idCrearArticuloPrecio");
 tagInputCrearArticuloPrecio.addEventListener("input",guardarDatosFormulario);
