@@ -87,11 +87,13 @@ function cargarArticulo(e){
   }; 
     
   if (listaPrecioArticulos.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )){
-     crearMensajeTransaccionToast("Ya existe un articulo con ese codigo");
+     crearMensajeToast("Ya existe un articulo con ese codigo");
   } else if (listaPrecioArticulos.some(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase() )){
-     crearMensajeTransaccionToast("Ya existe un articulo con ese nombre");
+     crearMensajeToast("Ya existe un articulo con ese nombre");
   } else {
-     const id = listaPrecioArticulos.length + 1;  
+     //const id = listaPrecioArticulos.length + 1;  
+     const id = listaPrecioArticulos.length === 0 ? 1
+                : listaPrecioArticulos.reduce((valorMaximo, articulo) => {(articulo.id>valorMaximo?articulo.id:valorMaximo)},0 ) +1;
      const articuloNuevo = new Articulo(id, 
                                         codigo.toUpperCase(), 
                                         nombre.toUpperCase(), 
@@ -120,8 +122,8 @@ function cargarArticulo(e){
       cantidad: 1
      };
 
-     if (selectCategoria == elementoNuevo.categoria || (selectCategoria == null)) {
-        articulosDisponibles.push(articuloDisponibleNuevo)
+     if (selectCategoria === elementoNuevo.categoria || (selectCategoria === "")) {
+        articulosDisponibles.push({...articuloDisponibleNuevo})
         localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
      }
      
@@ -131,20 +133,21 @@ function cargarArticulo(e){
      document.getElementById("idCrearArticuloMarca").value = "";
      document.getElementById("idCrearArticuloCategoria").value = "";
      document.getElementById("idCrearArticuloPrecio").value = "";
-     if (document.getElementById("idCrearArticuloImagen").files[0]) {
+     document.getElementById("idCrearArticuloImagen").value = "";
+     /*if (document.getElementById("idCrearArticuloImagen").files[0]) {
          document.getElementById("idCrearArticuloImagen").files[0]  = "";
-     }
+     }*/
 
      renderizarArticulosNuevos();
      agregarArticuloNuevosListeners();
-     crearMensajeTransaccionToast("El articulo se creo satisfactoriamente");
+     crearMensajeToast("El articulo se creo satisfactoriamente");
   }  
 } 
 
 function renderizarArticulosNuevos(){
    if (tagMainResultadosNuevo) {
+      tagMainResultadosNuevo.innerHTML = ``;
       if (articulosNuevos.length > 0 ){
-            tagMainResultadosNuevo.innerHTML = ``;
           articulosNuevos.forEach(articulo => {
             const tagArticuloNuevo = document.createElement("div");
             tagMainResultadosNuevo.appendChild(tagArticuloNuevo);
@@ -203,13 +206,6 @@ document.getElementById("idCrearArticuloNombre").value = articuloFormulario.nomb
 document.getElementById("idCrearArticuloMarca").value = articuloFormulario.marca || "";
 document.getElementById("idCrearArticuloCategoria").value = articuloFormulario.categoria || "";
 document.getElementById("idCrearArticuloPrecio").value = articuloFormulario.precio || "";
- 
-if (tagInputCrearArticuloImagen) {
-   const imagen = tagInputCrearArticuloImagen.files[0];
-   if (imagen) {
-      tagInputCrearArticuloImagen.files[0].name = articuloFormulario.imagen || "";
-   };
-}; 
 
 tagFormCrearArticulo.addEventListener("submit", cargarArticulo);
 tagInputCrearArticuloCodigo.addEventListener("input", guardarDatosFormulario);

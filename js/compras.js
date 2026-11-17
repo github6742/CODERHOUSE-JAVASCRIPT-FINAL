@@ -199,11 +199,11 @@ function renderizarCarritoCompras(){
 // agrega el articulo disponible al carrito de compras
 function agregarAlCarritoCompras(articuloId){
   if (carritoCompras.some(articulo => parseInt(articulo.id) === parseInt(articuloId))) {
-     crearMensajeTransaccionToast("El articulo ya existe en el carrito de compras");
+     crearMensajeToast("El articulo ya existe en el carrito de compras");
   } else {
-    crearMensajeTransaccionToast("Agregando articulo al carrito..."); 
+    crearMensajeToast("Agregando articulo al carrito..."); 
     const articulo = articulosDisponibles.find(articulo => articulo.id === articuloId);
-    carritoCompras.push(articulo);
+    carritoCompras.push({...articulo});
     localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));    
   };    
 };
@@ -270,14 +270,20 @@ function renderizarArticulosDisponibles(){
 // inicio de compras
 async function inicioCompras(){
   // inicia el modulo
-  if (localStorage.getItem("inicioModulo") == "NO" || localStorage.getItem("inicioModulo") == null) {
+  /*if (localStorage.getItem("inicioModulo") !== "SI") {
      await inicioModulo();  
-  };
+  };*/
   // obtiene los datos de storage
   datosStorageListaPrecios();
   datosStorageCarritoCompras();
   datosStorageArticulosDisponibles();
   datosStorageArticulosNuevos();
+  datosStorageCarritoComprasFinalizadas();
+  // 
+  const listaPreciosStorage = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
+  if (listaPreciosStorage.length === 0) {
+     await inicioModulo();  
+  }
   //obtiene el storage de categoria
   document.getElementById("idSelectCategoria").value = localStorage.getItem("idSelectCategoria") || "";
   // render articulos disponibles
@@ -292,101 +298,109 @@ inicioCompras();
 
 tagSelectCategoria.addEventListener("change", (e) => {
     e.preventDefault();
+    localStorage.setItem("idSelectCategoria", tagSelectCategoria.value);
     obtenerArticulosDisponiblesDatosFiltros();
     renderizarArticulosDisponibles();
 });
 // mensaje de confirmacion del carrito
 async function confirmarCarritoCompras(){
   if (carritoCompras.length === 0) {
-     crearMensajeTransaccionToast("El carrito de compras esta vacio"); 
-     return;
-  };  
+     crearMensajeToast("El carrito de compras esta vacio"); 
+     //return;
+  //};  
+  } else {
 
-  const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (articulo.precio*articulo.cantidad),0);
-  
-  const {value: swalValores} = await Swal.fire({
-   title: "Finalizar Compra",
-   html: `
-      <input id="idSwalNombre" class="swal2-input" placeholder="Ingrese su nombre completo">
-      <input id="idSwalEmail" class="swal2-input" placeholder="Email">
-      <input id="idSwalDireccionEnvio" class="swal2-input" placeholder="Direccion de envío">
-      <select id="idSwalMedioPago" class="swal2-select">
-        <option value="">Metodo de Pago</option>
-        <option value="efectivo">Efectivo</option>
-        <option value="tarjetaCredito">Tarjeta Crédito</option>
-        <option value="tarjetaDebito">Tarjeta Débito</option>
-        <option value="transferencia">Transferencia</option>
-      </select>
-      <p id="idSwalTotalPago">Total a pagar: <strong>${formatearImporte(totalCarrito)}</strong></p>        
-   `,
-   focusConfirm: false,
-   showCancelButton: true,
-   confirmButtonText: "Confirmar compra",
-   cancelButtonText: "Cancelar",
-   confirmButtonColor: "green",
-   cancelButtonColor: "red",
-   preConfirm: () => {
-       const nombre = document.getElementById("idSwalNombre").value;
-       const email = document.getElementById("idSwalEmail").value;
-       const direccionEnvio = document.getElementById("idSwalDireccionEnvio").value;
-       const medioPago = document.getElementById("idSwalMedioPago").value;
-       if (!nombre || !email || !direccionEnvio || !medioPago) {
-          Swal.showValidationMessage("Debe completar todos los campos")
-          return false;
-       }
-       return {nombre, email, direccionEnvio, medioPago};
-   }
-  });
+      const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (articulo.precio*articulo.cantidad),0);
+      
+      const {value: swalValores} = await Swal.fire({
+         title: "Finalizar Compra",
+         html: `
+            <input id="idSwalNombre" class="swal2-input" placeholder="Ingrese su nombre completo">
+            <input id="idSwalEmail" class="swal2-input" placeholder="Email">
+            <input id="idSwalDireccionEnvio" class="swal2-input" placeholder="Direccion de envío">
+            <select id="idSwalMedioPago" class="swal2-select">
+            <option value="">Metodo de Pago</option>
+            <option value="efectivo">Efectivo</option>
+            <option value="tarjetaCredito">Tarjeta Crédito</option>
+            <option value="tarjetaDebito">Tarjeta Débito</option>
+            <option value="transferencia">Transferencia</option>
+            </select>
+            <p id="idSwalTotalPago">Total a pagar: <strong>${formatearImporte(totalCarrito)}</strong></p>        
+         `,
+         focusConfirm: false,
+         showCancelButton: true,
+         confirmButtonText: "Confirmar compra",
+         cancelButtonText: "Cancelar",
+         confirmButtonColor: "green",
+         cancelButtonColor: "red",
+         preConfirm: () => {
+            const nombre = document.getElementById("idSwalNombre").value;
+            const email = document.getElementById("idSwalEmail").value;
+            const direccionEnvio = document.getElementById("idSwalDireccionEnvio").value;
+            const medioPago = document.getElementById("idSwalMedioPago").value;
+            if (!nombre || !email || !direccionEnvio || !medioPago) {
+               Swal.showValidationMessage("Debe completar todos los campos")
+               return false;
+            }
+            return {nombre, email, direccionEnvio, medioPago};
+         }
+      });
 
-  if (!swalValores) return;
-  
-  const numeroOrdenVenta = (carritoComprasFinalizadas.length === 0) ? 1 : carritoComprasFinalizadas.length+1;  
-  
-  await Swal.fire({
-   title: "Compra exitosa",
-   html: `
-      <p>Gracias por su compra, <strong>${swalValores.nombre}</strong><p>
-      <p>Número de Orden de Venta: <strong>${numeroOrdenVenta}</strong><p>
-      <p>Total Compra: <strong>${formatearImporte(totalCarrito)}</strong><p>
-      <p>Metodo de Pago: <strong>${swalValores.medioPago}</strong><p>
-      <p>Dirección de envío: <strong>${swalValores.direccionEnvio}</strong><p>
-   `,
-   icon: "success",
-   confirmButtonText: "Aceptar",
-   confirmButtonColor: "green"
-  });  
-  
-  datosStorageCarritoComprasFinalizadas();
- 
-  const venta = {
-   cliente: {
-     ordenDeVenta: numeroOrdenVenta,
-     nombreCliente: swalValores.nombre,
-     emailCliente: swalValores.email,
-     direccionEnvio: swalValores.direccionEnvio,
-     medioPago: swalValores.medioPago,
-     totalImporte: totalCarrito
-   },
-   articulos: [...carritoCompras]
-  };
-  
-  carritoComprasFinalizadas.push(venta);
-  localStorage.setItem("carritoComprasFinalizadas", JSON.stringify(carritoComprasFinalizadas));  
-  
-  const tagIdMainCarritoCompras = document.getElementById("idMainCarritoCompras");
-  (tagIdMainCarritoCompras) && (tagIdMainCarritoCompras.innerHTML=``);
-  
-  const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
-  (tagIdTotalCarrito) && (tagIdTotalCarrito.innerHTML=``);
-  
-  carritoCompras = [];
-  localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));  
+      //if (!swalValores) return;
+      if (swalValores) {
+         
+            datosStorageCarritoComprasFinalizadas();
+
+            const numeroOrdenVenta = (carritoComprasFinalizadas.length === 0) ? 1 : carritoComprasFinalizadas.length+1;  
+            
+            await Swal.fire({
+               title: "Compra exitosa",
+               html: `
+                  <p>Gracias por su compra, <strong>${swalValores.nombre}</strong><p>
+                  <p>Número de Orden de Venta: <strong>${numeroOrdenVenta}</strong><p>
+                  <p>Total Compra: <strong>${formatearImporte(totalCarrito)}</strong><p>
+                  <p>Metodo de Pago: <strong>${swalValores.medioPago}</strong><p>
+                  <p>Dirección de envío: <strong>${swalValores.direccionEnvio}</strong><p>
+               `,
+               icon: "success",
+               confirmButtonText: "Aceptar",
+               confirmButtonColor: "green"
+            });  
+            
+            datosStorageCarritoComprasFinalizadas();
+            
+            const venta = {
+               cliente: {
+               ordenDeVenta: numeroOrdenVenta,
+               nombreCliente: swalValores.nombre,
+               emailCliente: swalValores.email,
+               direccionEnvio: swalValores.direccionEnvio,
+               medioPago: swalValores.medioPago,
+               totalImporte: totalCarrito
+               },
+               articulos: [...carritoCompras]
+            };
+            
+            carritoComprasFinalizadas.push(venta);
+            localStorage.setItem("carritoComprasFinalizadas", JSON.stringify(carritoComprasFinalizadas));  
+            
+            const tagIdMainCarritoCompras = document.getElementById("idMainCarritoCompras");
+            (tagIdMainCarritoCompras) && (tagIdMainCarritoCompras.innerHTML=``);
+            
+            const tagIdTotalCarrito = document.getElementById("idTotalCarrito");
+            (tagIdTotalCarrito) && (tagIdTotalCarrito.innerHTML=``);
+            
+            carritoCompras = [];
+            localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));  
+
+      }
+   };            
 };
 
 tagBotonVerCarritoCompras.addEventListener("click", (e) => {
     e.preventDefault();
     if (carritoCompras.length === 0) {
-        crearMensajeTransaccionToast("El carrito de compras esta vacio");
+        crearMensajeToast("El carrito de compras esta vacio");
     } else {
       renderizarCarritoCompras();
    };
@@ -404,7 +418,7 @@ tagBotonOcultarCarritoCompras.addEventListener("click", (e) => {
          };
       };
    } else {
-      crearMensajeTransaccionToast("El carrito de compras esta vacio");
+      crearMensajeToast("El carrito de compras esta vacio");
    };
    localStorage.setItem("carritoComprasOculto","SI");
 });
@@ -442,7 +456,7 @@ tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
          };
       };
    } else {
-      crearMensajeTransaccionToast("El carrito de compras esta vacio");
+      crearMensajeToast("El carrito de compras esta vacio");
    };
 });
 

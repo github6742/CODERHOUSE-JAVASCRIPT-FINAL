@@ -23,7 +23,24 @@ class Articulo {
       };
 };
 
-function crearMensajeAvisoToast(texto){  
+
+function crearMensajeToast(texto){ 
+  Toastify({
+    text: texto,
+    duration: 3000,
+    destination: "#",
+    newWindow: false,
+    close:false,
+    gravity: "top", 
+    position: "left", 
+    stopOnFocus: true, 
+    style: {
+      background: "linear-gradient(to right, #00b09b, #96c93d)",
+    }
+  }).showToast();
+}
+/*
+function crearMensajeToast(texto){  
   Toastify({
     text: texto,
     duration: 3000,
@@ -56,7 +73,7 @@ function crearMensajeTransaccionToast(texto){
     }
   }).showToast();
 }
-
+*/
 function formatearImporte(importe){
   return new Intl.NumberFormat("es-AR",{
     style: "currency",
@@ -66,7 +83,7 @@ function formatearImporte(importe){
 }
 
 function peticion(texto){
-  (texto.length>0) && crearMensajeAvisoToast(texto);  
+  (texto.length>0) && crearMensajeToast(texto);  
   return new Promise((resolve) => {
      setTimeout(()=> {
         const conexion = true;
@@ -76,7 +93,7 @@ function peticion(texto){
 }
 
 async function fetchBase(){
-  crearMensajeAvisoToast("Cargando los articulos..")
+  crearMensajeToast("Cargando los articulos..")
   try {
     // simula una demora en la red
     await peticion(""); 
@@ -85,13 +102,13 @@ async function fetchBase(){
     const lista = await respFetch.json();
     listaPrecioArticulos = [...lista];
     localStorage.setItem("listaPrecioArticulos", JSON.stringify([...listaPrecioArticulos]));
-    crearMensajeAvisoToast("Los articulos fueron cargados satisfactoriamente");
+    crearMensajeToast("Los articulos fueron cargados satisfactoriamente");
   } catch (err) {
-    crearMensajeAvisoToast("No se logro cargar los articulos de la base: " + err.message);
+    crearMensajeToast("No se logro cargar los articulos de la base: " + err.message);
   } finally {
     // simula una demora en la lectura 
     await peticion(""); 
-    crearMensajeAvisoToast("Bienvenidos al modulo de Compras");
+    crearMensajeToast("Bienvenidos al modulo de Compras");
   }
 }
 
