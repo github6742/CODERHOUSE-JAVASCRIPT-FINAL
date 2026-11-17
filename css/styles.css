@@ -223,9 +223,7 @@ body {
 .mainContenedorCarritoComprasBotones{
     display: flex;
     flex-direction: column;
-    /* margin-top: 1rem; */
     width: 90%;
-    /* background-color:  #ddeeec; */
     background-color: rgb(164, 240, 167);
     border-radius: 8px;
     padding: 1rem;

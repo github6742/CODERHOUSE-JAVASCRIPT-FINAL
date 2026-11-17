@@ -23,7 +23,6 @@ class Articulo {
       };
 };
 
-
 function crearMensajeToast(texto){ 
   Toastify({
     text: texto,
@@ -39,41 +38,7 @@ function crearMensajeToast(texto){
     }
   }).showToast();
 }
-/*
-function crearMensajeToast(texto){  
-  Toastify({
-    text: texto,
-    duration: 3000,
-    destination: "#",
-    newWindow: false,
-    close:false,
-    className: "toastLargoTop",
-    gravity: "top", 
-    position: "left", 
-    stopOnFocus: true, 
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    }
-  }).showToast();
-}
 
-function crearMensajeTransaccionToast(texto){ 
-  Toastify({
-    text: texto,
-    duration: 3000,
-    destination: "#",
-    newWindow: false,
-    close:false,
-    className: "toastTransaccionTop",
-    gravity: "top", 
-    position: "left", 
-    stopOnFocus: true, 
-    style: {
-      background: "linear-gradient(to right, #00b09b, #96c93d)",
-    }
-  }).showToast();
-}
-*/
 function formatearImporte(importe){
   return new Intl.NumberFormat("es-AR",{
     style: "currency",
@@ -110,7 +75,7 @@ async function fetchBase(){
     await peticion(""); 
     crearMensajeToast("Bienvenidos al modulo de Compras");
   }
-}
+};
 
 function datosStorageListaPrecios() {
   let listaPreciosArticulosStorage = (JSON.parse(localStorage.getItem("listaPrecioArticulos")) == null) ? ([]) : JSON.parse(localStorage.getItem("listaPrecioArticulos"));

@@ -10,7 +10,6 @@ const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodi
 const tagInputCrearArticuloImagen = document.getElementById("idCrearArticuloImagen");
 const urlPathImagesCarga = "../assets/img/";
 
-
 function guardarDatosFormulario(){
   let imagenName;
   if (tagInputCrearArticuloImagen) {    
@@ -134,9 +133,6 @@ function cargarArticulo(e){
      document.getElementById("idCrearArticuloCategoria").value = "";
      document.getElementById("idCrearArticuloPrecio").value = "";
      document.getElementById("idCrearArticuloImagen").value = "";
-     /*if (document.getElementById("idCrearArticuloImagen").files[0]) {
-         document.getElementById("idCrearArticuloImagen").files[0]  = "";
-     }*/
 
      renderizarArticulosNuevos();
      agregarArticuloNuevosListeners();

@@ -269,17 +269,13 @@ function renderizarArticulosDisponibles(){
 };
 // inicio de compras
 async function inicioCompras(){
-  // inicia el modulo
-  /*if (localStorage.getItem("inicioModulo") !== "SI") {
-     await inicioModulo();  
-  };*/
   // obtiene los datos de storage
   datosStorageListaPrecios();
   datosStorageCarritoCompras();
   datosStorageArticulosDisponibles();
   datosStorageArticulosNuevos();
   datosStorageCarritoComprasFinalizadas();
-  // 
+  // chequeo inicio el modulo
   const listaPreciosStorage = JSON.parse(localStorage.getItem("listaPrecioArticulos")) || [];
   if (listaPreciosStorage.length === 0) {
      await inicioModulo();  
@@ -306,8 +302,6 @@ tagSelectCategoria.addEventListener("change", (e) => {
 async function confirmarCarritoCompras(){
   if (carritoCompras.length === 0) {
      crearMensajeToast("El carrito de compras esta vacio"); 
-     //return;
-  //};  
   } else {
 
       const totalCarrito = carritoCompras.reduce((sumador,articulo)  => sumador + (articulo.precio*articulo.cantidad),0);
@@ -346,7 +340,6 @@ async function confirmarCarritoCompras(){
          }
       });
 
-      //if (!swalValores) return;
       if (swalValores) {
          
             datosStorageCarritoComprasFinalizadas();
