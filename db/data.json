@@ -1,38 +1,146 @@
   [
     {
       "id": 1,
-      "codigo": "TVS0033PCO01",
-      "nombre": "TELEVISOR SMART TV PHILCO 33 PULGADAS",
+      "codigo": "TVS0032PCO01",
+      "nombre": "TELEVISOR SMART TV PHILCO 32 PULGADAS",
       "marca": "PHILCO",
       "categoria": "TELEVISOR",
-      "precio": 331000,
+      "precio": 321000,
       "imagen": "01-smart-tv-philco-32.webp"
     },
     {
       "id": 2,
-      "codigo": "TVS0033PHI02",
-      "nombre": "TELEVISOR SMART TV PHILLIPS 33 PULGADAS",
+      "codigo": "TVS0032PHI02",
+      "nombre": "TELEVISOR SMART TV PHILLIPS 32 PULGADAS",
       "marca": "PHILLIPS",
       "categoria": "TELEVISOR",
-      "precio": 332000,
-      "imagen": "02-smart-tv-philco-32.webp"
+      "precio": 299000,
+      "imagen": "02-smart-tv-phillips-32.webp"
     },
     {
       "id": 3,
-      "codigo": "TVS0033SAM03",
-      "nombre": "TELEVISOR SMART TV SAMSUNG 33 PULGADAS",
+      "codigo": "TVS0032SAM03",
+      "nombre": "TELEVISOR SMART TV SAMSUNG 32 PULGADAS",
       "marca": "SAMSUNG",
       "categoria": "TELEVISOR",
       "precio": 333000,
-      "imagen": "03-smart-tv-philco-32.webp"
+      "imagen": "03-smart-tv-samsung-32.webp"
     },
     {
       "id": 4,
-      "codigo": "TVS0033JVL04",
-      "nombre": "TELEVISOR SMART TV JVL 33 PULGADAS",
-      "marca": "JVL",
+      "codigo": "TVS0032JVC04",
+      "nombre": "TELEVISOR SMART TV JVC 32 PULGADAS",
+      "marca": "JVC",
       "categoria": "TELEVISOR",
       "precio": 334000,
-      "imagen": "04-smart-tv-philco-32.webp"
+      "imagen": "04-smart-tv-jvc-32.webp"
+    },
+    {
+      "id": 5,
+      "codigo": "TVS0043PCO05",
+      "nombre": "TELEVISOR SMART TV PHILCO 43 PULGADAS",
+      "marca": "PHILCO",
+      "categoria": "TELEVISOR",
+      "precio": 425000,
+      "imagen": "05-smart-tv-philco-43.webp"
+    },
+    {
+      "id": 6,
+      "codigo": "TVS0043PHI06",
+      "nombre": "TELEVISOR SMART TV PHILLIPS 43 PULGADAS",
+      "marca": "PHILLIPS",
+      "categoria": "TELEVISOR",
+      "precio": 426000,
+      "imagen": "06-smart-tv-phillips-43.webp"
+    },
+    {
+      "id": 7,
+      "codigo": "TVS0043SAM07",
+      "nombre": "TELEVISOR SMART TV SAMSUNG 43 PULGADAS",
+      "marca": "SAMSUNG",
+      "categoria": "TELEVISOR",
+      "precio": 427000,
+      "imagen": "07-smart-tv-samsung-43.webp"
+    },
+    {
+      "id": 8,
+      "codigo": "TVS0043JVL08",
+      "nombre": "TELEVISOR SMART TV JVC 43 PULGADAS",
+      "marca": "JVC",
+      "categoria": "TELEVISOR",
+      "precio": 580000,
+      "imagen": "08-smart-tv-jvc-43.webp"
+    },
+    {
+      "id": 9,
+      "codigo": "COCESC009",
+      "nombre": "COCINA ESCORIAL MASTER",
+      "marca": "ESCORIAL",
+      "categoria": "COCINA",
+      "precio": 590000,
+      "imagen": "09-cocina-escorial-master.webp"
+    },
+    {
+      "id": 10,
+      "codigo": "COCDRE010",
+      "nombre": "COCINA DREAN GAS INOXIDABLE",
+      "marca": "DREAN",
+      "categoria": "COCINA",
+      "precio": 510000,
+      "imagen": "10-cocina-drean-gas-inoxidable.webp"
+    },
+    {
+      "id": 11,
+      "codigo": "COCWHI011",
+      "nombre": "COCINA WHIRLPOOL MULTIGAS",
+      "marca": "WHIRLPOOL",
+      "categoria": "COCINA",
+      "precio": 511000,
+      "imagen": "11-cocina-whirlpool-multigas.webp"
+    },
+    {
+      "id": 12,
+      "codigo": "COCELE012",
+      "nombre": "COCINA ELECTROLUX EXPERIENCE",
+      "marca": "ELECTROLUX",
+      "categoria": "COCINA",
+      "precio": 512000,
+      "imagen": "12-cocina-electrolux-experience.webp"
+    },
+    {
+      "id": 13,
+      "codigo": "HELELE0013",
+      "nombre": "HELADERA ELECTOLUX BOTTOM FREEZER NO FROST",
+      "marca": "ELECTROLUX",
+      "categoria": "HELADERA",
+      "precio": 1300000,
+      "imagen": "13-heladera-electrolux-bottom-freezer.webp"
+    },
+    {
+      "id": 14,
+      "codigo": "HELWHI0014",
+      "nombre": "HELADERA WHIRLPOOL XPERT INVERTER",
+      "marca": "WHIRLPOOL",
+      "categoria": "HELADERA",
+      "precio": 1400000,
+      "imagen": "14-heladera-whirlpool-xpert-inverter.webp"
+    },
+    {
+      "id": 15,
+      "codigo": "HELGAG0015",
+      "nombre": "HELADERA GAFA TOP FREEZER PLATA",
+      "marca": "SAMSUNG",
+      "categoria": "HELADERA",
+      "precio": 1500000,
+      "imagen": "15-heladera-gafa-top-freezer-plata.webp"
+    },
+    {
+      "id": 16,
+      "codigo": "HELMID0016",
+      "nombre": "HELADERA MIDEA SIDE BY SIDE",
+      "marca": "MIDEA",
+      "categoria": "HELADERA",
+      "precio": 1600000,
+      "imagen": "16-heladera-midea-side-by-side.webp"
     }
   ]

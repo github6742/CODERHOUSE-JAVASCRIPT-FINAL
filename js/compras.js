@@ -423,13 +423,14 @@ tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
                 showCancelButton: true,
                 confirmButtonColor: "green",
                 cancelButtonColor: "red",
-                confirmButtonText: "Si , borrarlo"
+                confirmButtonText: "Si, vaciar"
            }).then((result) => {
                     if (result.isConfirmed) {
                        Swal.fire({
-                            title: "Eliminado",
-                            text: "El articulo ha sido borrado",
-                            icon: "success"
+                            title: "Articulos eliminados",
+                            text: "El carrito esta vacio",
+                            icon: "success",
+                            confirmButtonColor: "green"
                         });
       
                     carritoCompras.splice(0,carritoCompras.length);
