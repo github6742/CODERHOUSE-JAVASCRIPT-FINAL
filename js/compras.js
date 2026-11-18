@@ -189,8 +189,8 @@ function renderizarCarritoCompras(){
                         </div>
                         `;
         tagArticuloCarritoCompras.innerHTML = contenidoHtml;
-        localStorage.setItem("carritoComprasOculto","NO");
       });  
+      localStorage.setItem("carritoComprasOculto","NO");
     };
     actualizarTotalCarrito();
     agregarCarritoComprasListeners();
@@ -359,9 +359,7 @@ async function confirmarCarritoCompras(){
                confirmButtonText: "Aceptar",
                confirmButtonColor: "green"
             });  
-            
-            datosStorageCarritoComprasFinalizadas();
-            
+                        
             const venta = {
                cliente: {
                ordenDeVenta: numeroOrdenVenta,
@@ -404,7 +402,7 @@ tagBotonOcultarCarritoCompras.addEventListener("click", (e) => {
    if (carritoCompras.length > 0) {
       if (tagMainCarritoCompras) {
          if (tagMainCarritoCompras.childElementCount === 0) {
-            crearMensajeTransaccionToast("El carrito de compras ya esta oculto");
+            crearMensajeToast("El carrito de compras ya esta oculto");
          } else {
             tagMainCarritoCompras.innerHTML=``;
             (tagTotalCarrito) && (tagTotalCarrito.innerHTML=``);
@@ -421,7 +419,7 @@ tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
    if (carritoCompras.length > 0) {
       if (tagMainCarritoCompras) {
          if (tagMainCarritoCompras.childElementCount === 0) {
-            crearMensajeTransaccionToast("El carrito de compras ya esta vacio");
+            crearMensajeToast("El carrito de compras ya esta vacio");
          } else {
            Swal.fire({
                 title: "Desea vaciar el carrito?",
@@ -430,7 +428,8 @@ tagBotonVaciarCarritoCompras.addEventListener("click", (e) => {
                 showCancelButton: true,
                 confirmButtonColor: "green",
                 cancelButtonColor: "red",
-                confirmButtonText: "Si, vaciar"
+                confirmButtonText: "Si, vaciar",
+                cancelButtonText: "Cancelar"
            }).then((result) => {
                     if (result.isConfirmed) {
                        Swal.fire({

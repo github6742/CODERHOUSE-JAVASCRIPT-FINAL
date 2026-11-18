@@ -105,14 +105,10 @@
                 />
                 </div>      
               <div class="mainFormularioFila">
-                <label class="labelGlobal" 
-                  >Imagen:</label>
-                <input
-                  class="inputButtonFile"
-                  type="file"
-                  id="idCrearArticuloImagen"
-                  name="crearArticuloImagen"
-                />
+                <label class="labelGlobal" >Imagen:</label>
+                <button class="inputButtonFile" type="button" id="idButtonCrearArticuloImagen">Seleccionar</button>
+                <input class="inputTextImagen" type="text" id="idCrearArticuloImagen" name="crearArticuloImagen" placeholder="00-sin-imagen.webp" readonly/>
+                <input class="inputButtonFile" type="file" id="idCrearArticuloImagenFile" accept="image/*" hidden>
               </div> 
               <div class="mainFormularioFila">
                 <button

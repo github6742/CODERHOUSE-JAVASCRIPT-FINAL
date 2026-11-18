@@ -7,19 +7,11 @@ const tagSelectCrearArticuloCategoria = document.getElementById("idCrearArticulo
 const tagInputCrearArticuloMarca = document.getElementById("idCrearArticuloMarca");
 const tagInputCrearArticuloNombre = document.getElementById("idCrearArticuloNombre");
 const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodigo");
-const tagInputCrearArticuloImagen = document.getElementById("idCrearArticuloImagen");
 const urlPathImagesCarga = "../assets/img/";
 
 function guardarDatosFormulario(){
   let imagenName;
-  if (tagInputCrearArticuloImagen) {    
-    const imagen = tagInputCrearArticuloImagen.files[0];
-    if (imagen) {
-      imagenName = imagen.name;
-    } else {        
-      imagenName = "00-sin-imagen.webp";
-    };
-  };
+  
   const valores = 
   {
     codigo: document.getElementById("idCrearArticuloCodigo").value,
@@ -27,13 +19,14 @@ function guardarDatosFormulario(){
     marca: document.getElementById("idCrearArticuloMarca").value,
     categoria: document.getElementById("idCrearArticuloCategoria").value,
     precio: parseFloat(document.getElementById("idCrearArticuloPrecio").value),
-    imagen: imagenName
+    imagen:document.getElementById("idCrearArticuloImagen").value
   }
   localStorage.setItem("articuloFormulario", JSON.stringify(valores));
 };
 
 function agregarArticuloNuevosListeners() {
   if (articulosNuevos.length > 0) {
+    
      articulosNuevos.forEach(articulo => {
       const botonEliminarNuevo = document.getElementById("idResultadosBotonAgregarArtNuevo"+articulo.id);
       botonEliminarNuevo.addEventListener("click", (e) => {
@@ -43,14 +36,14 @@ function agregarArticuloNuevosListeners() {
           listaPrecioArticulos = listaPrecioArticulos.filter((articulon) => articulon.id != articulo.id);
           localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
 
+          articulosNuevos = articulosNuevos.filter((articulon) => articulon.id != articulo.id);
+          localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
+
           carritoCompras = carritoCompras.filter((articulon) => articulon.id != articulo.id);
           localStorage.setItem("carritoCompras", JSON.stringify(carritoCompras));
 
           articulosDisponibles = articulosDisponibles.filter((articulon) => articulon.id != articulo.id);
           localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
-
-          articulosNuevos = articulosNuevos.filter((articulon) => articulon.id != articulo.id);
-          localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
 
           tagMainResultadosNuevo.removeChild(tadArticuloNuevo);
       });    
@@ -74,33 +67,25 @@ function cargarArticulo(e){
   const marca = document.getElementById("idCrearArticuloMarca").value;
   const categoria = document.getElementById("idCrearArticuloCategoria").value;
   const precio = document.getElementById("idCrearArticuloPrecio").value;
-  const tagInputCrearArticuloImagen = document.getElementById("idCrearArticuloImagen");
-  let imagenName;
-  if (tagInputCrearArticuloImagen) {    
-    const imagen = tagInputCrearArticuloImagen.files[0];
-    if (imagen) {
-      imagenName = imagen.name;
-   } else {
-      imagenName = "00-sin-imagen.webp";
-   };
-  }; 
+  const imagen = document.getElementById("idCrearArticuloImagen").value||"00-sin-imagen.webp";
     
   if (listaPrecioArticulos.some(articulo => articulo.codigo.toUpperCase() == codigo.toUpperCase() )){
      crearMensajeToast("Ya existe un articulo con ese codigo");
   } else if (listaPrecioArticulos.some(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase() )){
      crearMensajeToast("Ya existe un articulo con ese nombre");
   } else {
-     //const id = listaPrecioArticulos.length + 1;  
-     const id = listaPrecioArticulos.length === 0 ? 1
-                : listaPrecioArticulos.reduce((valorMaximo, articulo) => {(articulo.id>valorMaximo?articulo.id:valorMaximo)},0 ) +1;
+     //
+     const id = listaPrecioArticulos.length == 0 ? -1
+                : parseInt(listaPrecioArticulos.reduce((valorMaximo, articulo) => ((articulo.id>valorMaximo)?articulo.id:valorMaximo),0 )) +1;
+                
      const articuloNuevo = new Articulo(id, 
                                         codigo.toUpperCase(), 
                                         nombre.toUpperCase(), 
                                         marca.toUpperCase(), 
                                         categoria.toUpperCase(), 
                                         parseFloat(precio),
-                                        imagenName);
-     const elementoNuevo = {
+                                        imagen);
+     const articuloLista = {
            id: articuloNuevo.id, 
            codigo: articuloNuevo.codigo,
            nombre: articuloNuevo.nombre,
@@ -110,19 +95,17 @@ function cargarArticulo(e){
            imagen: articuloNuevo.imagen
      };
   
-     listaPrecioArticulos.push(elementoNuevo);
+     listaPrecioArticulos.push(articuloLista);
      localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
-     elementoNuevo.cantidad = 1;
+     let elementoNuevo = {
+       ...articuloLista,
+       cantidad: 1
+     };
      articulosNuevos.push(elementoNuevo);
      localStorage.setItem("articulosNuevos", JSON.stringify(articulosNuevos));
-
-     let articuloDisponibleNuevo = {
-      ...elementoNuevo,
-      cantidad: 1
-     };
-
-     if (selectCategoria === elementoNuevo.categoria || (selectCategoria === "")) {
-        articulosDisponibles.push({...articuloDisponibleNuevo})
+     
+     if (selectCategoria === elementoNuevo.categoria || (!selectCategoria)) {
+        articulosDisponibles.push({...elementoNuevo});
         localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
      }
      
@@ -202,6 +185,7 @@ document.getElementById("idCrearArticuloNombre").value = articuloFormulario.nomb
 document.getElementById("idCrearArticuloMarca").value = articuloFormulario.marca || "";
 document.getElementById("idCrearArticuloCategoria").value = articuloFormulario.categoria || "";
 document.getElementById("idCrearArticuloPrecio").value = articuloFormulario.precio || "";
+document.getElementById("idCrearArticuloImagen").value = articuloFormulario.imagen ||"00-sin-imagen.webp";
 
 tagFormCrearArticulo.addEventListener("submit", cargarArticulo);
 tagInputCrearArticuloCodigo.addEventListener("input", guardarDatosFormulario);
@@ -209,4 +193,21 @@ tagInputCrearArticuloNombre.addEventListener("input",guardarDatosFormulario);
 tagInputCrearArticuloMarca.addEventListener("input",guardarDatosFormulario);
 tagSelectCrearArticuloCategoria.addEventListener("change",guardarDatosFormulario);
 tagInputCrearArticuloPrecio.addEventListener("input",guardarDatosFormulario);
-tagInputCrearArticuloImagen.addEventListener("change",guardarDatosFormulario);
+
+const tagButtonCrearArticuloImagen = document.getElementById("idButtonCrearArticuloImagen");
+const tagCrearArticuloImagen = document.getElementById("idCrearArticuloImagen");
+const tagCrearArticuloImagenFile = document.getElementById("idCrearArticuloImagenFile");
+
+tagButtonCrearArticuloImagen.addEventListener("click", (e) => {
+  e.preventDefault();
+  tagCrearArticuloImagenFile.click();
+  });
+
+  tagCrearArticuloImagenFile.addEventListener("change",(e) => {
+    e.preventDefault();
+    const archivo = tagCrearArticuloImagenFile.files[0];
+    if(archivo){
+      tagCrearArticuloImagen.value = archivo.name;
+    };
+    guardarDatosFormulario();
+  })
