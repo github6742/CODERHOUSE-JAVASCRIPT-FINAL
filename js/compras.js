@@ -298,6 +298,229 @@ tagSelectCategoria.addEventListener("change", (e) => {
     obtenerArticulosDisponiblesDatosFiltros();
     renderizarArticulosDisponibles();
 });
+//validacion del nombre del cliente, en la cofirmacion de la compra
+function validarNombre(nombre){
+   let error;
+   const soloLetras = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/;
+   if(nombre === ""){
+      error = "El nombre es obligatorio";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(!soloLetras.test(nombre)){
+      error = "El nombre debe tener letras y espacios";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(!nombre.includes(" ")){
+      error = "Ingrese nombre y apellido, por ejemplo: JUAN CARLOS PEREZ";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   return true;   
+};
+//validacion del email del cliente, en la confirmacion de la compra
+function validarEmail(email){
+   let error;
+   const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   if(email === ""){
+      error = "El email es obligatorio";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(!formatoEmail.test(email)){
+      error = "Email invalido";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(email.includes(" ")){
+      error = "El email no puede contener espacios";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   return true;   
+};
+// validacion del telefono del cliente,en la confirmacion de la compra
+function validarTelefono(telefono){
+  let error;
+  const formatoTelefono = /^\d{2}-\d{4}-\d{4}$/;
+  const formatoNumeros  = /^[0-9-]+$/;
+  if(telefono === ""){
+    error = "El telefono es obligatorio";
+    Swal.showValidationMessage(error);
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+    return false;
+  };
+  if(!formatoNumeros.test(telefono)){
+    error = "No puede contener letras, ingresar un formato de telefono valido por ej: 11-5555-6666";
+    Swal.showValidationMessage(error);
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+    return false;
+  };
+  if(!formatoTelefono.test(telefono)){
+    error = "Ingresar un formato de telefono valido por ej: 11-5555-6666";
+    Swal.showValidationMessage(error);
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+    return false;
+  };
+  return true;
+};
+//validacion del nombre de la calle del domicilio del cliente, en la cofirmacion de la compra
+function validarEnvioCalle(calle){
+   let error;
+   if(calle === ""){
+      error = "El nombre de la calle es obligatorio";
+      Swal.showValidationMessage(error);
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   return true;   
+};
+//validacion del numero en la calle del domicilio del cliente, en la cofirmacion de la compra
+function validarEnvioNro(numero){
+   let error;
+   const formatoNumeros  = /^[0-9-]+$/;
+   console.log("validaEnvioNro:"+numero)
+   console.log("validaEnvioNro.length:"+numero.length)
+   if(numero.length == 0){
+      error = "El numero en la calle es obligatorio";
+      Swal.showValidationMessage(error);
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(!formatoNumeros.test(numero)){
+       error = "El numero de calle no puede contener letras, solo numeros";
+       Swal.showValidationMessage(error);
+       setTimeout(() => {
+             Swal.resetValidationMessage();
+       }, 3000);
+      return false;
+   };
+   if(parseInt(numero)>999999 || parseInt(numero) <= 0){
+       error = "El numero debe ser entre 1 y 999999";
+       Swal.showValidationMessage(error);
+       setTimeout(() => {
+             Swal.resetValidationMessage();
+       }, 3000);
+      return false;
+   };
+   return true;   
+};
+//validacion de la ciudad del cliente, en la cofirmacion de la compra
+function validarEnvioCiudad(ciudad){
+   let error;
+   const formatoNumeros  = /^[0-9-]+$/;
+   if(ciudad.length == 0){
+      error = "El nombre de la ciudad es obligatorio";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(formatoNumeros.test(ciudad)){
+      error = "El nombre la cidudad no puede tener solo numeros";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   return true;   
+};
+//validacion de la provincia del cliente, en la cofirmacion de la compra
+function validarEnvioProvincia(provincia){
+   let error;
+   const formatoNumeros  = /^[0-9-]+$/;
+   if(provincia.length == 0){
+      error = "El nombre de la provincia es obligatorio";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(formatoNumeros.test(provincia)){
+      error = "El nombre la ciudad no puede tener solo numeros";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   return true;   
+};
+//validacion del numero de codigo postal del cliente, en la cofirmacion de la compra
+function validarEnvioCodigoPostal(codigoPostal){
+   let error;
+   const formatoNumeros  = /^[0-9-]+$/;
+   if(codigoPostal.length == 0){
+      error = "El numero de codigo postal es obligatorio";
+      Swal.showValidationMessage(error);
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   if(!formatoNumeros.test(codigoPostal)){
+       error = "El numero de calle no puede contener letras, solo numeros";
+       Swal.showValidationMessage(error);
+       setTimeout(() => {
+             Swal.resetValidationMessage();
+       }, 3000);
+      return false;
+   };
+   if(parseInt(codigoPostal)>9999 || parseInt(codigoPostal) <= 0){
+       error = "El numero de codigo postal debe ser entre 1 y 9999";
+       Swal.showValidationMessage(error);
+       setTimeout(() => {
+             Swal.resetValidationMessage();
+       }, 3000);
+      return false;
+   };
+   return true;   
+};
+//validacion del medio de pago del cliente, en la cofirmacion de la compra
+function validarMedioPago(medioPago){
+   let error;
+   if(medioPago.length == 0){
+      error = "Debe seleccionar un medio de pago";
+      Swal.showValidationMessage(error)
+      setTimeout(() => {
+            Swal.resetValidationMessage();
+      }, 3000);
+      return false;
+   };
+   return true;   
+};
 // mensaje de confirmacion del carrito
 async function confirmarCarritoCompras(){
   if (carritoCompras.length === 0) {
@@ -309,16 +532,31 @@ async function confirmarCarritoCompras(){
       const {value: swalValores} = await Swal.fire({
          title: "Finalizar Compra",
          html: `
-            <input id="idSwalNombre" class="swal2-input" placeholder="Ingrese su nombre completo">
-            <input id="idSwalEmail" class="swal2-input" placeholder="Email">
-            <input id="idSwalDireccionEnvio" class="swal2-input" placeholder="Direccion de envío">
+            <label for="idSwalNombre">Nombre</label>
+            <input id="idSwalNombre" class="swal2-input" placeholder="ej. JUAN CARLOS PEREZ">
+            <label for="idSwalEmail">Email</label>
+            <input id="idSwalEmail" class="swal2-input" placeholder="ej. juan.carlos.perez@gmail.com">
+            <label for="idSwalTelefono">Telefono</label>
+            <input id="idSwalTelefono" class="swal2-input" placeholder="ej. 11-3827-6499">
+            <label for="idSwalDireccionEnvioCalle">Calle</label>
+            <input id="idSwalDireccionEnvioCalle" class="swal2-input" placeholder="ej. Mario Bravo">
+            <label for="idSwalDireccionEnvioNro">Numero</label>
+            <input id="idSwalDireccionEnvioNro" class="swal2-input" placeholder="ej. 641">
+            <label for="idSwalDireccionEnvioCiudad">Ciudad</label>
+            <input id="idSwalDireccionEnvioCiudad" class="swal2-input" placeholder="ej. Avellaneda">
+            <label for="idSwalDireccionEnvioProvincia">Provincia</label>
+            <input id="idSwalDireccionEnvioProvincia" class="swal2-input" placeholder="ej. Buenos Aires">
+            <label for="idSwalDireccionEnvioCodigoPostal">Cod.Post.</label>
+            <input id="idSwalDireccionEnvioCodigoPostal" class="swal2-input" placeholder="ej. 1780">
+            <label for="idSwalMedioPago">Medio Pago</label>
             <select id="idSwalMedioPago" class="swal2-select">
-            <option value="">Metodo de Pago</option>
+            <option value=""></option>
             <option value="efectivo">Efectivo</option>
             <option value="tarjetaCredito">Tarjeta Crédito</option>
             <option value="tarjetaDebito">Tarjeta Débito</option>
             <option value="transferencia">Transferencia</option>
             </select>
+            <br><br>
             <p id="idSwalTotalPago">Total a pagar: <strong>${formatearImporte(totalCarrito)}</strong></p>        
          `,
          focusConfirm: false,
@@ -330,22 +568,50 @@ async function confirmarCarritoCompras(){
          preConfirm: () => {
             const nombre = document.getElementById("idSwalNombre").value;
             const email = document.getElementById("idSwalEmail").value;
-            const direccionEnvio = document.getElementById("idSwalDireccionEnvio").value;
+            const telefono = document.getElementById("idSwalTelefono").value;
+            const direccionEnvioCalle = document.getElementById("idSwalDireccionEnvioCalle").value;
+            const direccionEnvioNro = document.getElementById("idSwalDireccionEnvioNro").value;
+            const direccionEnvioCiudad = document.getElementById("idSwalDireccionEnvioCiudad").value;
+            const direccionEnvioProvincia = document.getElementById("idSwalDireccionEnvioProvincia").value;
+            const direccionEnvioCodigoPostal = document.getElementById("idSwalDireccionEnvioCodigoPostal").value;
             const medioPago = document.getElementById("idSwalMedioPago").value;
-            if (!nombre || !email || !direccionEnvio || !medioPago) {
+            if (!validarNombre(nombre) ||               
+                !validarEmail(email) ||
+                !validarTelefono(telefono) ||
+                !validarEnvioCalle(direccionEnvioCalle) ||
+                !validarEnvioNro(direccionEnvioNro)||
+                !validarEnvioCiudad(direccionEnvioCiudad)||
+                !validarEnvioProvincia(direccionEnvioProvincia)||
+                !validarEnvioCodigoPostal(direccionEnvioCodigoPostal)||
+                !validarMedioPago(medioPago)
+               ) {
+               return false;              
+            };
+            if (!nombre || !email || !telefono ||
+                !direccionEnvioCalle || !direccionEnvioNro || !direccionEnvioCiudad || 
+                !direccionEnvioCodigoPostal || !direccionEnvioProvincia || !medioPago                 
+            ) {
                Swal.showValidationMessage("Debe completar todos los campos")
                return false;
-            }
-            return {nombre, email, direccionEnvio, medioPago};
+            };
+            return {nombre, email, telefono,
+                    direccionEnvioCalle,
+                    direccionEnvioNro,
+                    direccionEnvioCiudad,
+                    direccionEnvioProvincia,
+                    direccionEnvioCodigoPostal,
+                    medioPago};
          }
       });
 
       if (swalValores) {
          
             datosStorageCarritoComprasFinalizadas();
-
-            const numeroOrdenVenta = (carritoComprasFinalizadas.length === 0) ? 1 : carritoComprasFinalizadas.length+1;  
             
+            const numeroOrdenVenta = (carritoComprasFinalizadas.length) === 0 ? 1
+                : parseInt(carritoComprasFinalizadas.reduce((valorMaximo, venta) => ((venta.ordenDeVenta>valorMaximo)?venta.ordenDeVenta:valorMaximo),0 )) +1;
+            console.log("numeroordenventa: " + numeroOrdenVenta)
+            //const numeroOrdenVenta = (carritoComprasFinalizadas.length == 0) ? 1 : carritoComprasFinalizadas.length+1;  
             await Swal.fire({
                title: "Compra exitosa",
                html: `
@@ -353,7 +619,11 @@ async function confirmarCarritoCompras(){
                   <p>Número de Orden de Venta: <strong>${numeroOrdenVenta}</strong><p>
                   <p>Total Compra: <strong>${formatearImporte(totalCarrito)}</strong><p>
                   <p>Metodo de Pago: <strong>${swalValores.medioPago}</strong><p>
-                  <p>Dirección de envío: <strong>${swalValores.direccionEnvio}</strong><p>
+                  <p>Dirección de envío: <strong>${swalValores.direccionEnvioCalle} 
+                                                 ${swalValores.direccionEnvioNro}, 
+                                                 ${swalValores.direccionEnvioCiudad}, 
+                                                 ${swalValores.direccionEnvioProvincia}, 
+                                                 ${swalValores.direccionEnvioCodigoPostal}</strong><p>
                `,
                icon: "success",
                confirmButtonText: "Aceptar",
@@ -362,10 +632,14 @@ async function confirmarCarritoCompras(){
                         
             const venta = {
                cliente: {
-               ordenDeVenta: numeroOrdenVenta,
+               ordenDeVenta: parseInt(numeroOrdenVenta),
                nombreCliente: swalValores.nombre,
                emailCliente: swalValores.email,
-               direccionEnvio: swalValores.direccionEnvio,
+               direccionEnvioCalle: swalValores.direccionEnvioCalle,
+               direccionEnvioNro: swalValores.direccionEnvioNro,
+               direccionEnvioCiudad: swalValores.direccionEnvioCiudad,
+               direccionEnvioProvincia: swalValores.direccionEnvioProvincia,
+               direccionEnvioCodigoPostal: swalValores.direccionEnvioCodigoPostal,
                medioPago: swalValores.medioPago,
                totalImporte: totalCarrito
                },
@@ -384,7 +658,7 @@ async function confirmarCarritoCompras(){
             carritoCompras = [];
             localStorage.setItem("carritoCompras",JSON.stringify(carritoCompras));  
 
-      }
+      };
    };            
 };
 

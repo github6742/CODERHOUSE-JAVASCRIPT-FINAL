@@ -74,8 +74,8 @@ function cargarArticulo(e){
   } else if (listaPrecioArticulos.some(articulo => articulo.nombre.toUpperCase() == nombre.toUpperCase() )){
      crearMensajeToast("Ya existe un articulo con ese nombre");
   } else {
-     //
-     const id = listaPrecioArticulos.length == 0 ? -1
+     
+     const id = listaPrecioArticulos.length == 0 ? 1
                 : parseInt(listaPrecioArticulos.reduce((valorMaximo, articulo) => ((articulo.id>valorMaximo)?articulo.id:valorMaximo),0 )) +1;
                 
      const articuloNuevo = new Articulo(id, 
