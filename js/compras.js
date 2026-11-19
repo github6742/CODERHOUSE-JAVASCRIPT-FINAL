@@ -607,9 +607,14 @@ async function confirmarCarritoCompras(){
       if (swalValores) {
          
             datosStorageCarritoComprasFinalizadas();
-            
-            const numeroOrdenVenta = (carritoComprasFinalizadas.length) === 0 ? 1
-                : parseInt(carritoComprasFinalizadas.reduce((valorMaximo, venta) => ((venta.ordenDeVenta>valorMaximo)?venta.ordenDeVenta:valorMaximo),0 )) +1;
+            const listaArticulosCompras = carritoCompras.map(articulo => `
+               <li>${articulo.nombre} - x ${articulo.cantidad} - ${formatearImporte(articulo.cantidad*articulo.precio)}</li>
+               `
+            ).join("");
+            console.log("listaArticulosCompras")
+            console.log(listaArticulosCompras)
+            const numeroOrdenVenta = (carritoComprasFinalizadas.length == 0) ? 1
+                : parseInt(carritoComprasFinalizadas.reduce((valorMaximo, venta) => ((venta.cliente.ordenDeVenta>valorMaximo)?venta.cliente.ordenDeVenta:valorMaximo),0 )) +1;
             console.log("numeroordenventa: " + numeroOrdenVenta)
             //const numeroOrdenVenta = (carritoComprasFinalizadas.length == 0) ? 1 : carritoComprasFinalizadas.length+1;  
             await Swal.fire({
@@ -624,6 +629,7 @@ async function confirmarCarritoCompras(){
                                                  ${swalValores.direccionEnvioCiudad}, 
                                                  ${swalValores.direccionEnvioProvincia}, 
                                                  ${swalValores.direccionEnvioCodigoPostal}</strong><p>
+                  <ul>${listaArticulosCompras}</ul>
                `,
                icon: "success",
                confirmButtonText: "Aceptar",
