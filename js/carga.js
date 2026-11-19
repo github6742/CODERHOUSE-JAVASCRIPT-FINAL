@@ -1,6 +1,4 @@
 const tagFormCrearArticulo = document.getElementById("idMainFormularioCrear");
-const tagMainResultados = document.getElementById("idMainResultadosArtCreado");
-const tagMainContenedorResultadosArtCreado = document.getElementById("idMainContenedorResultadosArtCreado");
 const tagMainResultadosNuevo = document.getElementById("idMainResultadosArtCreado");
 const tagInputCrearArticuloPrecio = document.getElementById("idCrearArticuloPrecio");
 const tagSelectCrearArticuloCategoria = document.getElementById("idCrearArticuloCategoria");
@@ -30,7 +28,6 @@ function agregarArticuloNuevosListeners() {
       const botonEliminarNuevo = document.getElementById("idResultadosBotonAgregarArtNuevo"+articulo.id);
       botonEliminarNuevo.addEventListener("click", (e) => {
           e.preventDefault();
-          const tadArticuloNuevo = document.getElementById("idArticuloNuevo"+articulo.id);
 
           listaPrecioArticulos = listaPrecioArticulos.filter((articulon) => articulon.id != articulo.id);
           localStorage.setItem("listaPrecioArticulos", JSON.stringify(listaPrecioArticulos));
@@ -44,7 +41,8 @@ function agregarArticuloNuevosListeners() {
           articulosDisponibles = articulosDisponibles.filter((articulon) => articulon.id != articulo.id);
           localStorage.setItem("articulosDisponibles", JSON.stringify(articulosDisponibles));
 
-          tagMainResultadosNuevo.removeChild(tadArticuloNuevo);
+          const tagArticuloNuevo = document.getElementById("idArticuloNuevo"+articulo.id);
+          (tagArticuloNuevo) && tagMainResultadosNuevo.removeChild(tagArticuloNuevo);
       });    
     });
   };  
@@ -209,4 +207,4 @@ tagButtonCrearArticuloImagen.addEventListener("click", (e) => {
       tagCrearArticuloImagen.value = archivo.name;
     };
     guardarDatosFormulario();
-  })
+  });

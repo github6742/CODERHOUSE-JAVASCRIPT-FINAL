@@ -1,17 +1,10 @@
-agMainContenedor // declaracion de variables de elementos del index.html
-//const tagMainContenedor = document.getElementById("idMainContenedor");
-//const tagMainContenedorElementos = document.getElementById("idMainContenedorElementos");
+//declaracion de variables de elementos del index.html
 const tagSelectCategoria = document.getElementById("idSelectCategoria");
-//const tagMainContenedorResultados = document.getElementById("idMainContenedorResultados");
 const tagMainResultados = document.getElementById("idMainResultados");
-//const tagTituloBotonesCarrito = document.getElementById("idTituloBotonesCarrito");
-//const tagMainContenedorCarritoComprasBotones = document.getElementById("idMainContenedorCarritoComprasBotones");
-//const tagMainCarritoComprasBotones = document.getElementById("idMainCarritoComprasBotones");
 const tagBotonVerCarritoCompras = document.getElementById("idBotonVerCarritoCompras");
 const tagBotonOcultarCarritoCompras = document.getElementById("idBotonOcultarCarritoCompras");
 const tagBotonVaciarCarritoCompras = document.getElementById("idBotonVaciarCarritoCompras");
 const tagBotonConfirmarCarritoCompras = document.getElementById("idBotonConfirmarCarritoCompras");
-//const tagMainContenedorCarritoCompras = document.getElementById("idMainContenedorCarritoCompras");
 const tagTotalCarrito = document.getElementById("idTotalCarrito");
 const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
 const urlPathImagesCompras = "./assets/img/";
@@ -22,7 +15,6 @@ function actualizarTotalCarrito(){
       tagTotalCarrito.innerText= `Total Carrito Compras: ${formatearImporte(totalCarritoCompras)}`;
   };
 };
-
 //obtiene los articulos disponibles, para el evento de filtrar por categoria
 function obtenerArticulosDisponiblesDatosFiltros(){
   if (tagSelectCategoria) {
@@ -198,7 +190,7 @@ function renderizarCarritoCompras(){
 };
 // agrega el articulo disponible al carrito de compras
 function agregarAlCarritoCompras(articuloId){
-  if (carritoCompras.some(articulo => parseInt(articulo.id) === parseInt(articuloId))) {
+  if (carritoCompras.some(articulo => articulo.id === articuloId)) {
      crearMensajeToast("El articulo ya existe en el carrito de compras");
   } else {
     crearMensajeToast("Agregando articulo al carrito..."); 
@@ -211,28 +203,28 @@ function agregarAlCarritoCompras(articuloId){
 function cambiarCantidad(articuloId, cantidad){
   const tagCantidad = document.getElementById("idCantidadSpan"+articuloId);  
   const articulo = articulosDisponibles.find(articulo => articulo.id === articuloId);
-  let cantidadActual = Number(articulo.cantidad);
-  if (tagCantidad) {
-     if (cantidadActual === 1 && cantidad === -1) {
+  if (tagCantidad && articulo) {
+     let cantidadActual = Number(articulo.cantidad);
+     if (cantidadActual === 1 && Number(cantidad) === -1) {
         cantidadActual = 1;
      } else {
-        cantidadActual += cantidad;
+        cantidadActual += Number(cantidad);
      };
      articulo.cantidad = Number(cantidadActual);
+     localStorage.setItem("articulosDisponibles",JSON.stringify(articulosDisponibles));
      renderizarArticulosDisponibles();
-     localStorage.setItem("articulosDisponibles",JSON.stringify(articulosDisponibles))
   };
 };
 // realiza el cambio de cantidad en el card de articulo DEL CARRITO y en el storage del carrito
 function cambiarCantidadCC(articuloId, cantidad){
   const tagCantidad = document.getElementById("idCantidadSpanCC"+articuloId);  
   const articulo = carritoCompras.find(articulo => articulo.id === articuloId);
-  let cantidadActual = Number(articulo.cantidad);
-  if (tagCantidad) {
-     if (cantidadActual === 1 && cantidad === -1) {
+  if (tagCantidad && articulo) {
+     let cantidadActual = Number(articulo.cantidad);
+     if (cantidadActual === 1 && Number(cantidad) === -1) {
         cantidadActual = 1;
      } else {
-        cantidadActual += cantidad;
+        cantidadActual += Number(cantidad);
      };
      articulo.cantidad = Number(cantidadActual);
      renderizarCarritoCompras();
