@@ -357,7 +357,6 @@ function validarEnvioCalle(calle){
 };
 //validacion del numero en la calle del domicilio del cliente, en la cofirmacion de la compra
 function validarEnvioNro(numero){
-   //const formatoNumeros  = /^[0-9-]+$/;
    const formatoNumeros = /^\d+$/;
    if(numero.length == 0){
       mostrarValidacion("El numero en la calle es obligatorio");
