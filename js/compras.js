@@ -1,17 +1,17 @@
-// declaracion de variables de elementos del index.html
-const tagMainContenedor = document.getElementById("idMainContenedor");
-const tagMainContenedorElementos = document.getElementById("idMainContenedorElementos");
+agMainContenedor // declaracion de variables de elementos del index.html
+//const tagMainContenedor = document.getElementById("idMainContenedor");
+//const tagMainContenedorElementos = document.getElementById("idMainContenedorElementos");
 const tagSelectCategoria = document.getElementById("idSelectCategoria");
-const tagMainContenedorResultados = document.getElementById("idMainContenedorResultados");
+//const tagMainContenedorResultados = document.getElementById("idMainContenedorResultados");
 const tagMainResultados = document.getElementById("idMainResultados");
-const tagTituloBotonesCarrito = document.getElementById("idTituloBotonesCarrito");
-const tagMainContenedorCarritoComprasBotones = document.getElementById("idMainContenedorCarritoComprasBotones");
-const tagMainCarritoComprasBotones = document.getElementById("idMainCarritoComprasBotones");
+//const tagTituloBotonesCarrito = document.getElementById("idTituloBotonesCarrito");
+//const tagMainContenedorCarritoComprasBotones = document.getElementById("idMainContenedorCarritoComprasBotones");
+//const tagMainCarritoComprasBotones = document.getElementById("idMainCarritoComprasBotones");
 const tagBotonVerCarritoCompras = document.getElementById("idBotonVerCarritoCompras");
 const tagBotonOcultarCarritoCompras = document.getElementById("idBotonOcultarCarritoCompras");
 const tagBotonVaciarCarritoCompras = document.getElementById("idBotonVaciarCarritoCompras");
 const tagBotonConfirmarCarritoCompras = document.getElementById("idBotonConfirmarCarritoCompras");
-const tagMainContenedorCarritoCompras = document.getElementById("idMainContenedorCarritoCompras");
+//const tagMainContenedorCarritoCompras = document.getElementById("idMainContenedorCarritoCompras");
 const tagTotalCarrito = document.getElementById("idTotalCarrito");
 const tagMainCarritoCompras = document.getElementById("idMainCarritoCompras");
 const urlPathImagesCompras = "./assets/img/";
@@ -298,225 +298,136 @@ tagSelectCategoria.addEventListener("change", (e) => {
     obtenerArticulosDisponiblesDatosFiltros();
     renderizarArticulosDisponibles();
 });
+// mostrar la validacion en la confirmacion de la compra
+function mostrarValidacion(mensaje){
+   Swal.showValidationMessage(mensaje);
+   setTimeout(() => {Swal.resetValidationMessage();}, 3000);
+};
 //validacion del nombre del cliente, en la cofirmacion de la compra
 function validarNombre(nombre){
-   let error;
    const soloLetras = /^[a-zA-ZÁÉÍÓÚáéíóúÑñ\s]+$/;
    if(nombre === ""){
-      error = "El nombre es obligatorio";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El nombre es obligatorio");
       return false;
    };
    if(!soloLetras.test(nombre)){
-      error = "El nombre debe tener letras y espacios";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El nombre debe tener letras y espacios");
       return false;
    };
    if(!nombre.includes(" ")){
-      error = "Ingrese nombre y apellido, por ejemplo: JUAN CARLOS PEREZ";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("Ingrese nombre y apellido, por ejemplo: JUAN CARLOS PEREZ");
       return false;
    };
    return true;   
 };
 //validacion del email del cliente, en la confirmacion de la compra
 function validarEmail(email){
-   let error;
    const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
    if(email === ""){
-      error = "El email es obligatorio";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El email es obligatorio");
       return false;
    };
    if(!formatoEmail.test(email)){
-      error = "Email invalido";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("Email invalido");
       return false;
    };
    if(email.includes(" ")){
-      error = "El email no puede contener espacios";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El email no puede contener espacios");
       return false;
    };
    return true;   
 };
 // validacion del telefono del cliente,en la confirmacion de la compra
 function validarTelefono(telefono){
-  let error;
   const formatoTelefono = /^\d{2}-\d{4}-\d{4}$/;
   const formatoNumeros  = /^[0-9-]+$/;
-  if(telefono === ""){
-    error = "El telefono es obligatorio";
-    Swal.showValidationMessage(error);
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
-    return false;
+  if (telefono === ""){
+     mostrarValidacion("El telefono es obligatorio");
+     return false;
   };
-  if(!formatoNumeros.test(telefono)){
-    error = "No puede contener letras, ingresar un formato de telefono valido por ej: 11-5555-6666";
-    Swal.showValidationMessage(error);
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+  if(!formatoNumeros.test(telefono)){    
+    mostrarValidacion("No puede contener letras, ingresar un formato de telefono valido por ej: 11-5555-6666");
     return false;
   };
   if(!formatoTelefono.test(telefono)){
-    error = "Ingresar un formato de telefono valido por ej: 11-5555-6666";
-    Swal.showValidationMessage(error);
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+    mostrarValidacion("Ingresar un formato de telefono valido por ej: 11-5555-6666");
     return false;
   };
   return true;
 };
 //validacion del nombre de la calle del domicilio del cliente, en la cofirmacion de la compra
 function validarEnvioCalle(calle){
-   let error;
    if(calle === ""){
-      error = "El nombre de la calle es obligatorio";
-      Swal.showValidationMessage(error);
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El nombre de la calle es obligatorio");
       return false;
    };
    return true;   
 };
 //validacion del numero en la calle del domicilio del cliente, en la cofirmacion de la compra
 function validarEnvioNro(numero){
-   let error;
-   const formatoNumeros  = /^[0-9-]+$/;
-   console.log("validaEnvioNro:"+numero)
-   console.log("validaEnvioNro.length:"+numero.length)
+   //const formatoNumeros  = /^[0-9-]+$/;
+   const formatoNumeros = /^\d+$/;
    if(numero.length == 0){
-      error = "El numero en la calle es obligatorio";
-      Swal.showValidationMessage(error);
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El numero en la calle es obligatorio");
       return false;
    };
    if(!formatoNumeros.test(numero)){
-       error = "El numero de calle no puede contener letras, solo numeros";
-       Swal.showValidationMessage(error);
-       setTimeout(() => {
-             Swal.resetValidationMessage();
-       }, 3000);
+      mostrarValidacion("El numero de calle no puede contener letras, solo numeros");
       return false;
    };
-   if(parseInt(numero)>999999 || parseInt(numero) <= 0){
-       error = "El numero debe ser entre 1 y 999999";
-       Swal.showValidationMessage(error);
-       setTimeout(() => {
-             Swal.resetValidationMessage();
-       }, 3000);
+   if(Number(numero) <=0 || Number(numero) > 999999){
+      mostrarValidacion("El numero debe ser entre 1 y 999999");
       return false;
    };
    return true;   
 };
 //validacion de la ciudad del cliente, en la cofirmacion de la compra
 function validarEnvioCiudad(ciudad){
-   let error;
    const formatoNumeros  = /^[0-9-]+$/;
    if(ciudad.length == 0){
-      error = "El nombre de la ciudad es obligatorio";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El nombre de la ciudad es obligatorio");
       return false;
    };
    if(formatoNumeros.test(ciudad)){
-      error = "El nombre la cidudad no puede tener solo numeros";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El nombre la cidudad no puede tener solo numeros");
       return false;
    };
    return true;   
 };
 //validacion de la provincia del cliente, en la cofirmacion de la compra
 function validarEnvioProvincia(provincia){
-   let error;
    const formatoNumeros  = /^[0-9-]+$/;
-   if(provincia.length == 0){
-      error = "El nombre de la provincia es obligatorio";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+   if(provincia.length == 0){      
+      mostrarValidacion("El nombre de la provincia es obligatorio");
       return false;
    };
    if(formatoNumeros.test(provincia)){
-      error = "El nombre la ciudad no puede tener solo numeros";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El nombre la provincia no puede tener solo numeros");
       return false;
    };
    return true;   
 };
 //validacion del numero de codigo postal del cliente, en la cofirmacion de la compra
 function validarEnvioCodigoPostal(codigoPostal){
-   let error;
    const formatoNumeros  = /^[0-9-]+$/;
    if(codigoPostal.length == 0){
-      error = "El numero de codigo postal es obligatorio";
-      Swal.showValidationMessage(error);
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("El numero de codigo postal es obligatorio");
       return false;
    };
    if(!formatoNumeros.test(codigoPostal)){
-       error = "El numero de calle no puede contener letras, solo numeros";
-       Swal.showValidationMessage(error);
-       setTimeout(() => {
-             Swal.resetValidationMessage();
-       }, 3000);
+      mostrarValidacion("El numero de codigo postal no puede contener letras, solo numeros");
       return false;
    };
-   if(parseInt(codigoPostal)>9999 || parseInt(codigoPostal) <= 0){
-       error = "El numero de codigo postal debe ser entre 1 y 9999";
-       Swal.showValidationMessage(error);
-       setTimeout(() => {
-             Swal.resetValidationMessage();
-       }, 3000);
+   if(Number(codigoPostal) <= 0 || Number(codigoPostal) > 9999 ){
+      mostrarValidacion("El numero de codigo postal debe ser entre 1 y 9999");
       return false;
    };
    return true;   
 };
 //validacion del medio de pago del cliente, en la cofirmacion de la compra
 function validarMedioPago(medioPago){
-   let error;
    if(medioPago.length == 0){
-      error = "Debe seleccionar un medio de pago";
-      Swal.showValidationMessage(error)
-      setTimeout(() => {
-            Swal.resetValidationMessage();
-      }, 3000);
+      mostrarValidacion("Debe seleccionar un medio de pago");
       return false;
    };
    return true;   
@@ -611,12 +522,8 @@ async function confirmarCarritoCompras(){
                <li class="swalResumenCompraDetalleLi">${articulo.nombre} - x ${articulo.cantidad} - ${formatearImporte(articulo.cantidad*articulo.precio)}</li>
                `
             ).join("");
-            console.log("listaArticulosCompras")
-            console.log(listaArticulosCompras)
             const numeroOrdenVenta = (carritoComprasFinalizadas.length == 0) ? 1
                 : parseInt(carritoComprasFinalizadas.reduce((valorMaximo, venta) => ((venta.cliente.ordenDeVenta>valorMaximo)?venta.cliente.ordenDeVenta:valorMaximo),0 )) +1;
-            console.log("numeroordenventa: " + numeroOrdenVenta)
-            //const numeroOrdenVenta = (carritoComprasFinalizadas.length == 0) ? 1 : carritoComprasFinalizadas.length+1;  
             await Swal.fire({
                title: "Compra exitosa",
                width: "70%",

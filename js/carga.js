@@ -10,7 +10,6 @@ const tagInputCrearArticuloCodigo = document.getElementById("idCrearArticuloCodi
 const urlPathImagesCarga = "../assets/img/";
 
 function guardarDatosFormulario(){
-  let imagenName;
   
   const valores = 
   {

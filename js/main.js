@@ -13,13 +13,13 @@ class Articulo {
                   categoria,
                   precio,
                   imagen){
-        this.id = id,
+        this.id = id;
         this.codigo = codigo;
         this.nombre = nombre;
         this.marca = marca;
         this.categoria = categoria;
         this.precio = precio;
-        this.imagen = imagen;
+        this.imagen = imagen
       };
 };
 
@@ -121,6 +121,5 @@ async function inicioModulo(){
   const conectado = await peticion("Realizando conexion....");
   if (conectado) {
      await fetchBase();
-     localStorage.setItem("inicioModulo","SI");
   };
 };
