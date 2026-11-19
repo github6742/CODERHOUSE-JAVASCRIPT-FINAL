@@ -316,3 +316,47 @@ body {
   display: block;
 }
 
+/*****************
+ SWEETALER - CONFIRMACION COMPRAS
+*****************/
+.swalResumenCompra {
+    color: green;
+    background-color: rgb(201, 211, 201);
+    font-weight: bold;
+    border-radius: 8px;
+    padding: 2rem;
+}
+.swalResumenCompraDetalleTitulo {
+    margin: 10px 0;
+    padding: 1rem;
+    background-color: green;
+    color: white;
+    font-weight: bold;
+    border-radius: 8px;
+}
+.swalResumenCompraDetalleDiv {
+    background-color: rgb(201, 211, 201);
+    margin: 10px 0;
+    padding: 1rem;
+    border-radius: 8px;
+    height: 200px;
+    max-height: 200px;
+    display:flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+.swalResumenCompraDetalleUl {
+    margin: 10px;
+    padding: 0.25rem;
+    border-radius: 8px;
+    height: 100%;
+    overflow-y: auto;
+}
+.swalResumenCompraDetalleLi{
+    background-color: rgb(146, 180, 180);
+    margin: 10px;
+    padding: 0.25rem;
+    list-style: none;
+    color: rgb(3, 53, 21);
+    border-radius: 8px;
+}

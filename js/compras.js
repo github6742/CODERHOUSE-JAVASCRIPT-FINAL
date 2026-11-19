@@ -608,7 +608,7 @@ async function confirmarCarritoCompras(){
          
             datosStorageCarritoComprasFinalizadas();
             const listaArticulosCompras = carritoCompras.map(articulo => `
-               <li>${articulo.nombre} - x ${articulo.cantidad} - ${formatearImporte(articulo.cantidad*articulo.precio)}</li>
+               <li class="swalResumenCompraDetalleLi">${articulo.nombre} - x ${articulo.cantidad} - ${formatearImporte(articulo.cantidad*articulo.precio)}</li>
                `
             ).join("");
             console.log("listaArticulosCompras")
@@ -619,17 +619,23 @@ async function confirmarCarritoCompras(){
             //const numeroOrdenVenta = (carritoComprasFinalizadas.length == 0) ? 1 : carritoComprasFinalizadas.length+1;  
             await Swal.fire({
                title: "Compra exitosa",
+               width: "70%",
                html: `
-                  <p>Gracias por su compra, <strong>${swalValores.nombre}</strong><p>
-                  <p>Número de Orden de Venta: <strong>${numeroOrdenVenta}</strong><p>
-                  <p>Total Compra: <strong>${formatearImporte(totalCarrito)}</strong><p>
-                  <p>Metodo de Pago: <strong>${swalValores.medioPago}</strong><p>
+               <div class="swalResumenCompra">
+                  <p>Gracias por su compra, <strong>${swalValores.nombre}</strong></p>
+                  <p>Número de Orden de Compra: <strong>${numeroOrdenVenta}</strong></p>
+                  <p>Total Compra: <strong>${formatearImporte(totalCarrito)}</strong></p>
+                  <p>Metodo de Pago: <strong>${swalValores.medioPago}</strong></p>
                   <p>Dirección de envío: <strong>${swalValores.direccionEnvioCalle} 
                                                  ${swalValores.direccionEnvioNro}, 
                                                  ${swalValores.direccionEnvioCiudad}, 
                                                  ${swalValores.direccionEnvioProvincia}, 
-                                                 ${swalValores.direccionEnvioCodigoPostal}</strong><p>
-                  <ul>${listaArticulosCompras}</ul>
+                                                 CP: ${swalValores.direccionEnvioCodigoPostal}</strong></p>
+               </div>
+               <p class="swalResumenCompraDetalleTitulo">Detalle de Articulos</p>
+               <div class="swalResumenCompraDetalleDiv">                                                 
+                  <ul class="swalResumenCompraDetalleUl">${listaArticulosCompras}</ul>
+               </div>   
                `,
                icon: "success",
                confirmButtonText: "Aceptar",
